@@ -64,6 +64,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/services/{id}', [ServiceManageController::class, 'show']);
         Route::get('/services/{id}/letter', [ServiceManageController::class, 'getLetter']);
         Route::get('/services/{id}/pdf', [ServiceManageController::class, 'downloadPdf']);
+        Route::post('/services/{id}/send-whatsapp', [ServiceManageController::class, 'sendWhatsApp']);
         Route::patch('/services/{id}/status', [ServiceManageController::class, 'updateStatus']);
 
         // Manajemen Pengaduan Warga

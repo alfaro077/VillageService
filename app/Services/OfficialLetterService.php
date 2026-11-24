@@ -6,6 +6,8 @@ use App\Models\ServiceRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Barryvdh\DomPDF\PDF as DomPdfInstance;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class OfficialLetterService
 {
@@ -58,6 +60,34 @@ class OfficialLetterService
     }
 
     /**
+     * Dapatkan base URL yang dapat diakses publik/jaringan untuk link di WhatsApp.
+     */
+    public function getPublicBaseUrl(): string
+    {
+        $configured = config('services.whatsapp.public_url');
+        if (! empty($configured)) {
+            return rtrim((string) $configured, '/');
+        }
+
+        $appUrl = rtrim((string) config('app.url', url('/')), '/');
+
+        // Jika terdeteksi di localhost, coba deteksi IP LAN lokal mesin agar HP warga di Wi-Fi bisa akses
+        if (str_contains($appUrl, 'localhost') || str_contains($appUrl, '127.0.0.1')) {
+            $hostname = gethostname();
+            if ($hostname) {
+                $hostIp = @gethostbyname($hostname);
+                if ($hostIp && $hostIp !== '127.0.0.1' && filter_var($hostIp, FILTER_VALIDATE_IP)) {
+                    $port = parse_url($appUrl, PHP_URL_PORT) ?: 8000;
+
+                    return "http://{$hostIp}:{$port}";
+                }
+            }
+        }
+
+        return $appUrl;
+    }
+
+    /**
      * Buat URL dan pesan notifikasi WhatsApp resmi dari Pemerintah Desa.
      *
      * @return array<string, string>
@@ -70,8 +100,9 @@ class OfficialLetterService
         $letterNumber = (string) ($serviceRequest->letter_number ?? '-');
         $phone = $this->formatWhatsAppPhone($serviceRequest->phone_number);
 
-        $trackingUrl = url("/lacak?ticket={$ticket}");
-        $pdfUrl = url("/api/v1/public/track/{$ticket}/pdf");
+        $baseUrl = $this->getPublicBaseUrl();
+        $trackingUrl = "{$baseUrl}/lacak?ticket={$ticket}";
+        $pdfUrl = "{$baseUrl}/api/v1/public/track/{$ticket}/pdf";
 
         $notesPart = '';
         if (! empty($serviceRequest->admin_notes)) {
@@ -85,11 +116,12 @@ class OfficialLetterService
             ."• Jenis Surat: {$serviceName}\n"
             ."• Nomor Surat Resmi: {$letterNumber}\n"
             .$notesPart."\n"
-            ."📄 *Unduh Berkas Surat Resmi (Format PDF):*\n"
+            ."📄 *Berkas Dokumen PDF Resmi:*\n"
+            ."Dokumen resmi berformat PDF siap diunduh secara sah melalui tautan berikut:\n"
             ."{$pdfUrl}\n\n"
-            ."Portal Lacak & Status Layanan:\n"
+            ."Portal Lacak Status Pelayanan:\n"
             ."{$trackingUrl}\n\n"
-            ."Atau Anda dapat mengambil fisik surat bertanda tangan di Kantor Balai Desa Mandiri Sejahtera pada jam kerja (Senin - Jumat, 08.00 - 15.30 WIB).\n\n"
+            ."Atau Anda dapat mengambil fisik surat bertanda tangan basah di Kantor Balai Desa Mandiri Sejahtera pada jam kerja (Senin - Jumat, 08.00 - 15.30 WIB).\n\n"
             .'_Pesan otomatis resmi Sistem Pelayanan Online Desa Mandiri Sejahtera._';
 
         $encodedText = urlencode($message);
@@ -102,6 +134,87 @@ class OfficialLetterService
             'whatsapp_url' => $whatsappUrl,
             'pdf_url' => $pdfUrl,
         ];
+    }
+
+    /**
+     * Kirim dokumen PDF resmi langsung ke WhatsApp warga menggunakan Gateway API (Fonnte/Wablas)
+     * Bekerja langsung dari backend bahkan ketika server berada di lingkungan lokal.
+     *
+     * @return array<string, mixed>
+     */
+    public function sendPdfViaWhatsAppGateway(ServiceRequest $serviceRequest): array
+    {
+        $token = config('services.whatsapp.gateway_token');
+        $phone = $this->formatWhatsAppPhone($serviceRequest->phone_number);
+
+        if (empty($phone)) {
+            return [
+                'success' => false,
+                'sent_via_gateway' => false,
+                'message' => 'Nomor WhatsApp pemohon tidak valid atau kosong.',
+            ];
+        }
+
+        if (empty($token)) {
+            return [
+                'success' => false,
+                'sent_via_gateway' => false,
+                'reason' => 'no_gateway_token',
+                'message' => 'Gateway token WhatsApp belum dikonfigurasi di file .env. Sistem menggunakan pengiriman WhatsApp Web interaktif dengan auto-download berkas PDF.',
+            ];
+        }
+
+        try {
+            $notification = $this->buildWhatsAppNotification($serviceRequest);
+            $cleanNo = preg_replace('/[^a-zA-Z0-9]/', '_', (string) ($serviceRequest->letter_number ?? $serviceRequest->ticket_number));
+            $cleanName = preg_replace('/[^a-zA-Z0-9]/', '_', (string) $serviceRequest->full_name);
+            $filename = "Surat_{$cleanNo}_{$cleanName}.pdf";
+
+            $pdfInstance = $this->generatePdf($serviceRequest);
+            $pdfContent = $pdfInstance->output();
+
+            // Kirim file dokumen PDF biner langsung ke API WhatsApp Fonnte
+            $response = Http::withHeaders([
+                'Authorization' => $token,
+            ])->timeout(20)->attach('file', $pdfContent, $filename)->post('https://api.fonnte.com/send', [
+                'target' => $phone,
+                'message' => $notification['message'],
+                'filename' => $filename,
+                'countryCode' => '62',
+            ]);
+
+            $json = $response->json();
+            $status = $response->successful() && ($json['status'] ?? true);
+
+            if ($status) {
+                Log::info("WhatsApp PDF berhasil dikirim via Gateway ke {$phone} untuk tiket {$serviceRequest->ticket_number}");
+
+                return [
+                    'success' => true,
+                    'sent_via_gateway' => true,
+                    'message' => 'Berkas PDF surat resmi telah berhasil dikirimkan langsung ke nomor WhatsApp pemohon.',
+                    'gateway_response' => $json,
+                ];
+            }
+
+            Log::warning("Gagal mengirim WhatsApp PDF via Gateway: {$response->body()}");
+
+            return [
+                'success' => false,
+                'sent_via_gateway' => false,
+                'reason' => 'gateway_rejected',
+                'message' => 'Gateway WhatsApp menolak pengiriman: '.($json['reason'] ?? $response->body()),
+            ];
+        } catch (\Throwable $e) {
+            Log::error('Exception saat mengirim WhatsApp PDF via Gateway: '.$e->getMessage());
+
+            return [
+                'success' => false,
+                'sent_via_gateway' => false,
+                'reason' => 'exception',
+                'message' => 'Terjadi kesalahan gateway: '.$e->getMessage(),
+            ];
+        }
     }
 
     /**

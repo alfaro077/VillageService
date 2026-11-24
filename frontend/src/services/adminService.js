@@ -64,6 +64,14 @@ export const adminService = {
   },
 
   /**
+   * Kirim dokumen surat resmi via WhatsApp Gateway atau dapatkan link WhatsApp.
+   */
+  async sendServiceWhatsApp(id) {
+    const response = await api.post(`/admin/services/${id}/send-whatsapp`);
+    return response.data;
+  },
+
+  /**
    * Dapatkan daftar laporan pengaduan warga.
    */
   async getComplaints(params = {}) {

@@ -266,6 +266,13 @@ class ApiServiceTest extends TestCase
         $publicPdfResponse = $this->get('/api/v1/public/track/'.$request->ticket_number.'/pdf');
         $publicPdfResponse->assertStatus(200)
             ->assertHeader('content-type', 'application/pdf');
+
+        // Admin dapat memicu endpoint pengiriman WhatsApp
+        $sendWaResponse = $this->withHeader('Authorization', 'Bearer '.$token)
+            ->postJson('/api/v1/admin/services/'.$request->id.'/send-whatsapp');
+        $sendWaResponse->assertStatus(200)
+            ->assertJsonPath('success', true)
+            ->assertJsonStructure(['whatsapp_gateway', 'whatsapp']);
     }
 
     /**

@@ -130,11 +130,17 @@ class ServiceManageController extends Controller
         );
 
         $fresh = $serviceRequest->fresh(['serviceType', 'processor', 'documents']);
+        $gatewayResult = null;
+
+        if ($validated['status'] === 'selesai') {
+            $gatewayResult = $this->letterService->sendPdfViaWhatsAppGateway($fresh);
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'Status pengajuan berhasil diperbarui.',
             'data' => new AdminServiceRequestResource($fresh),
+            'whatsapp_gateway' => $gatewayResult,
         ]);
     }
 
@@ -198,5 +204,36 @@ class ServiceManageController extends Controller
         $filename = "Surat_{$cleanLetterNo}.pdf";
 
         return $pdf->download($filename);
+    }
+
+    /**
+     * Kirim dokumen PDF resmi langsung via WhatsApp Gateway atau dapatkan data link WhatsApp.
+     */
+    public function sendWhatsApp(Request $request, int $id): JsonResponse
+    {
+        $serviceRequest = ServiceRequest::with(['serviceType', 'processor'])->find($id);
+
+        if (! $serviceRequest) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengajuan surat tidak ditemukan.',
+            ], 404);
+        }
+
+        if (empty($serviceRequest->letter_number)) {
+            $serviceRequest->update([
+                'letter_number' => $this->letterService->generateLetterNumber($serviceRequest),
+                'letter_generated_at' => now(),
+            ]);
+        }
+
+        $gatewayResult = $this->letterService->sendPdfViaWhatsAppGateway($serviceRequest);
+        $whatsappData = $this->letterService->buildWhatsAppNotification($serviceRequest);
+
+        return response()->json([
+            'success' => true,
+            'whatsapp_gateway' => $gatewayResult,
+            'whatsapp' => $whatsappData,
+        ]);
     }
 }
