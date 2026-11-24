@@ -164,10 +164,10 @@ class ServiceManageController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => [
+            'data' => array_merge($letterDoc, [
                 'document' => $letterDoc,
                 'whatsapp' => $whatsapp,
-            ],
+            ]),
         ]);
     }
 }

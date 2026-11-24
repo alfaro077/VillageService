@@ -184,8 +184,8 @@ const openLetterModal = async () => {
   if (!result.value?.ticket_number) return;
   isLetterLoading.value = true;
   try {
-    const data = await publicService.getPublicLetter(result.value.ticket_number);
-    letterData.value = data;
+    const res = await publicService.getPublicLetter(result.value.ticket_number);
+    letterData.value = res.document || res;
     isLetterModalOpen.value = true;
   } catch (err) {
     alert(err.response?.data?.message || 'Gagal memuat dokumen surat resmi.');

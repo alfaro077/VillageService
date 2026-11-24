@@ -10,15 +10,15 @@
           </span>
           <div>
             <h3 class="text-sm font-bold leading-tight">Dokumen Surat Resmi Diterbitkan</h3>
-            <p class="text-[11px] text-slate-300 font-mono">{{ letterData?.letter_number || 'Dokumen Resmi Desa' }}</p>
+            <p class="text-[11px] text-slate-300 font-mono">{{ activeLetter?.letter_number || 'Dokumen Resmi Desa' }}</p>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
           <!-- WhatsApp Button (if available) -->
           <a
-            v-if="whatsappUrl"
-            :href="whatsappUrl"
+            v-if="effectiveWhatsappUrl"
+            :href="effectiveWhatsappUrl"
             target="_blank"
             class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-sm"
           >
@@ -83,13 +83,13 @@
             <!-- 2. Teks Nama Instansi (Di samping logo) -->
             <div class="flex-1 px-2 sm:px-4 leading-tight">
               <h3 class="text-xs sm:text-sm font-semibold tracking-wide text-black uppercase">
-                {{ letterData?.kop?.pemerintah_kabupaten || 'PEMERINTAH KABUPATEN BOGOR' }}
+                {{ activeLetter?.kop?.pemerintah_kabupaten || 'PEMERINTAH KABUPATEN BOGOR' }}
               </h3>
               <h3 class="text-xs sm:text-sm font-bold tracking-wide text-black uppercase mt-0.5">
-                {{ letterData?.kop?.kecamatan || 'KECAMATAN MANDIRI JAYA' }}
+                {{ activeLetter?.kop?.kecamatan || 'KECAMATAN MANDIRI JAYA' }}
               </h3>
               <h1 class="text-base sm:text-xl font-black tracking-wide text-[#0b2545] uppercase mt-1 leading-tight">
-                {{ letterData?.kop?.desa || 'PEMERINTAH DESA MANDIRI SEJAHTERA' }}
+                {{ activeLetter?.kop?.desa || 'PEMERINTAH DESA MANDIRI SEJAHTERA' }}
               </h1>
               <h4 class="text-xs sm:text-sm font-bold tracking-wider text-black uppercase mt-0.5">
                 PROVINSI JAWA BARAT
@@ -110,7 +110,7 @@
           <div class="mt-6 mb-5 space-y-0.5 text-xs">
             <div class="grid grid-cols-12 gap-1">
               <span class="col-span-3 sm:col-span-2">Nomor :</span>
-              <span class="col-span-9 sm:col-span-10 font-mono text-black">{{ letterData?.letter_number || '470/0001/DMS-SKD/XI/2026' }}</span>
+              <span class="col-span-9 sm:col-span-10 font-mono text-black font-semibold">{{ activeLetter?.letter_number || '470/0001/DMS-SKD/XI/2026' }}</span>
             </div>
             <div class="grid grid-cols-12 gap-1">
               <span class="col-span-3 sm:col-span-2">Lamp. :</span>
@@ -118,14 +118,14 @@
             </div>
             <div class="grid grid-cols-12 gap-1">
               <span class="col-span-3 sm:col-span-2">Hal.   :</span>
-              <span class="col-span-9 sm:col-span-10 font-bold text-black">{{ letterData?.letter_title || 'Surat Keterangan Pelayanan Desa' }}</span>
+              <span class="col-span-9 sm:col-span-10 font-bold text-black">{{ activeLetter?.letter_title || 'Surat Keterangan Pelayanan Desa' }}</span>
             </div>
           </div>
 
           <!-- Penerima / Tujuan Surat -->
           <div class="my-5 text-xs space-y-0.5">
             <p>Kepada Yth Bapak/Ibu</p>
-            <p class="font-bold text-black">{{ letterData?.pemohon?.nama || 'Warga Pemohon' }} / Pihak Terkait</p>
+            <p class="font-bold text-black">{{ residentName }} / Pihak Terkait</p>
             <p>Di-</p>
             <p class="pl-6">Tempat</p>
           </div>
@@ -138,36 +138,46 @@
               Kami Kepala Desa Mandiri Sejahtera, Kecamatan Mandiri Jaya, Kabupaten Bogor menerangkan bahwa warga berikut untuk melaksanakan pengurusan administrasi kependudukan resmi :
             </p>
 
-            <!-- TABEL DATA RESMI WARGA (Border tabel hitam rapi persis gambar) -->
+            <!-- TABEL DATA RESMI WARGA (NIK, NO KK, NAMA TERDEKRIPSI LENGKAP & JELAS) -->
             <div class="my-3 overflow-x-auto">
               <table class="w-full border-collapse border border-black text-xs">
                 <thead>
                   <tr class="bg-white">
-                    <th class="border border-black px-3 py-2 text-center font-bold text-black uppercase">NAMA PEMOHON</th>
-                    <th class="border border-black px-3 py-2 text-center font-bold text-black uppercase">NIK</th>
-                    <th class="border border-black px-3 py-2 text-center font-bold text-black uppercase">NO. KK</th>
+                    <th class="border border-black px-3 py-2 text-center font-bold text-black uppercase w-1/3">NAMA PEMOHON</th>
+                    <th class="border border-black px-3 py-2 text-center font-bold text-black uppercase w-1/3">NIK</th>
+                    <th class="border border-black px-3 py-2 text-center font-bold text-black uppercase w-1/3">NO. KK</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td class="border border-black px-3 py-2 font-bold text-black uppercase text-center">{{ letterData?.pemohon?.nama || '-' }}</td>
-                    <td class="border border-black px-3 py-2 font-mono text-center text-black">{{ letterData?.pemohon?.nik || '-' }}</td>
-                    <td class="border border-black px-3 py-2 font-mono text-center text-black">{{ letterData?.pemohon?.kk_number || '-' }}</td>
+                    <td class="border border-black px-3 py-2.5 font-bold text-black uppercase text-center">
+                      {{ residentName }}
+                    </td>
+                    <td class="border border-black px-3 py-2.5 font-mono font-bold text-center text-black tracking-wider text-xs">
+                      {{ residentNik }}
+                    </td>
+                    <td class="border border-black px-3 py-2.5 font-mono font-bold text-center text-black tracking-wider text-xs">
+                      {{ residentKk }}
+                    </td>
                   </tr>
                   <tr>
-                    <td class="border border-black px-3 py-1.5 font-bold text-black bg-slate-50/50">ALAMAT DOMISILI</td>
-                    <td colspan="2" class="border border-black px-3 py-1.5 text-black">{{ letterData?.pemohon?.alamat || '-' }}</td>
+                    <td class="border border-black px-3 py-2 font-bold text-black bg-slate-50/50">ALAMAT DOMISILI</td>
+                    <td colspan="2" class="border border-black px-3 py-2 text-black leading-relaxed">
+                      {{ residentAddress }}
+                    </td>
                   </tr>
                   <tr>
-                    <td class="border border-black px-3 py-1.5 font-bold text-black bg-slate-50/50">KEPERLUAN</td>
-                    <td colspan="2" class="border border-black px-3 py-1.5 text-black font-medium">{{ letterData?.pemohon?.keperluan || '-' }}</td>
+                    <td class="border border-black px-3 py-2 font-bold text-black bg-slate-50/50">KEPERLUAN</td>
+                    <td colspan="2" class="border border-black px-3 py-2 text-black font-semibold">
+                      {{ residentPurpose }}
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             <p>
-              {{ letterData?.isi_keterangan || 'Menerangkan dengan sebenarnya bahwa orang yang bersangkutan di atas adalah benar-benar warga penduduk Desa Mandiri Sejahtera dan memenuhi persyaratan administrasi yang sah.' }} Dokumen resmi ini diterbitkan secara sah berdasarkan data kependudukan terverifikasi.
+              {{ activeLetter?.isi_keterangan || 'Menerangkan dengan sebenarnya bahwa orang yang bersangkutan di atas adalah benar-benar warga penduduk Desa Mandiri Sejahtera dan memenuhi persyaratan administrasi yang sah.' }} Dokumen resmi ini diterbitkan secara sah berdasarkan data kependudukan terverifikasi.
             </p>
 
             <p>
@@ -179,8 +189,8 @@
 
           <!-- Tanda Tangan di Sebelah Kiri Bawah (Persis seperti gambar referensi) -->
           <div class="mt-8 text-xs text-left space-y-1">
-            <p>Mandiri Jaya, {{ letterData?.tanggal_terbit || '24 November 2026' }}</p>
-            <p>{{ letterData?.pejabat?.jabatan || 'Kepala Desa' }},</p>
+            <p>Mandiri Jaya, {{ activeLetter?.tanggal_terbit || '24 November 2026' }}</p>
+            <p>{{ activeLetter?.pejabat?.jabatan || 'Kepala Desa' }},</p>
 
             <!-- QR Code Besar TTE Resmi dengan Lambang di Tengah -->
             <div class="my-2 inline-block">
@@ -203,10 +213,10 @@
 
             <!-- Nama Pejabat & NIP -->
             <p class="font-bold text-black uppercase tracking-wide text-xs">
-              {{ letterData?.pejabat?.nama || 'H. AHMAD SYARIFUDDIN, S.IP' }}
+              {{ activeLetter?.pejabat?.nama || 'H. AHMAD SYARIFUDDIN, S.IP' }}
             </p>
             <p class="text-slate-700 font-mono text-[11px]">
-              NIP. {{ letterData?.pejabat?.nip || '19780512 200604 1 008' }}
+              NIP. {{ activeLetter?.pejabat?.nip || '19780512 200604 1 008' }}
             </p>
           </div>
 
@@ -217,6 +227,8 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -233,6 +245,42 @@ const props = defineProps({
 });
 
 defineEmits(['close']);
+
+// Dapatkan objek data surat resmi (menangani jika response dari backend dibungkus { document: ..., whatsapp: ... } ataupun objek langsung)
+const activeLetter = computed(() => {
+  if (!props.letterData) return null;
+  return props.letterData.document || props.letterData;
+});
+
+// Getter data warga dengan fallback yang aman dan fleksibel
+const residentName = computed(() => {
+  const d = activeLetter.value;
+  return d?.pemohon?.nama || d?.pemohon?.full_name || d?.full_name || d?.nama || '-';
+});
+
+const residentNik = computed(() => {
+  const d = activeLetter.value;
+  return d?.pemohon?.nik || d?.nik || '-';
+});
+
+const residentKk = computed(() => {
+  const d = activeLetter.value;
+  return d?.pemohon?.kk_number || d?.kk_number || '-';
+});
+
+const residentAddress = computed(() => {
+  const d = activeLetter.value;
+  return d?.pemohon?.alamat || d?.pemohon?.address || d?.address || d?.alamat || '-';
+});
+
+const residentPurpose = computed(() => {
+  const d = activeLetter.value;
+  return d?.pemohon?.keperluan || d?.pemohon?.purpose_description || d?.purpose_description || d?.keperluan || '-';
+});
+
+const effectiveWhatsappUrl = computed(() => {
+  return props.whatsappUrl || activeLetter.value?.whatsapp?.whatsapp_url || props.letterData?.whatsapp?.whatsapp_url || '';
+});
 
 const handlePrint = () => {
   window.print();
