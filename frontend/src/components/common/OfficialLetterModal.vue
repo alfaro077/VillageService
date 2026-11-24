@@ -55,15 +55,15 @@
       <!-- Scrollable Paper Container -->
       <div class="overflow-y-auto max-h-[85vh] p-4 sm:p-8 bg-slate-200/80 flex justify-center print:p-0 print:m-0 print:bg-white print:max-h-none print:overflow-visible">
         
-        <!-- Official Indonesian Letter Paper (Tanpa bingkai pinggir luar) -->
-        <div id="official-letter-paper" class="bg-white text-black w-full max-w-3xl p-6 sm:p-12 shadow-md font-sans text-xs leading-normal print:shadow-none print:max-w-none print:w-full print:border-none print:p-0">
+        <!-- Official Indonesian Letter Paper (Format 1 Halaman Bersih & Pas) -->
+        <div id="official-letter-paper" class="bg-white text-black w-full max-w-3xl p-6 sm:p-10 shadow-md font-sans text-xs leading-normal print:shadow-none print:max-w-none print:w-full print:border-none print:p-0">
           
           <!-- KOP SURAT RESMI (Logo Biru di Kiri, Nama Instansi di Tengah, Kontak di Kanan) -->
-          <div class="flex items-center justify-between gap-3 sm:gap-4 pb-4 border-b border-black/10">
+          <div class="flex items-center justify-between gap-3 sm:gap-4 pb-3 border-b border-black/10">
             
             <!-- 1. Logo Kotak Biru dengan Emblem Emas di Sebelah Kiri -->
-            <div class="w-20 sm:w-26 h-26 sm:h-32 bg-[#0b2545] flex items-center justify-center p-1.5 sm:p-2 shrink-0 shadow-2xs">
-              <svg viewBox="0 0 100 100" class="w-18 h-18 sm:w-22 sm:h-22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="w-18 sm:w-22 h-24 sm:h-28 bg-[#0b2545] flex items-center justify-center p-1.5 shrink-0 shadow-2xs">
+              <svg viewBox="0 0 100 100" class="w-16 h-16 sm:w-20 sm:h-20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <!-- Lingkaran Luar Emas -->
                 <circle cx="50" cy="50" r="46" fill="#0f2b5c" stroke="#facc15" stroke-width="2.5"/>
                 <circle cx="50" cy="50" r="41" fill="none" stroke="#facc15" stroke-width="1" stroke-dasharray="2,2"/>
@@ -81,14 +81,14 @@
             </div>
 
             <!-- 2. Teks Nama Instansi (Di samping logo) -->
-            <div class="flex-1 px-2 sm:px-4 leading-tight">
+            <div class="flex-1 px-2 sm:px-3 leading-tight">
               <h3 class="text-xs sm:text-sm font-semibold tracking-wide text-black uppercase">
                 {{ activeLetter?.kop?.pemerintah_kabupaten || 'PEMERINTAH KABUPATEN BOGOR' }}
               </h3>
               <h3 class="text-xs sm:text-sm font-bold tracking-wide text-black uppercase mt-0.5">
                 {{ activeLetter?.kop?.kecamatan || 'KECAMATAN MANDIRI JAYA' }}
               </h3>
-              <h1 class="text-base sm:text-xl font-black tracking-wide text-[#0b2545] uppercase mt-1 leading-tight">
+              <h1 class="text-base sm:text-xl font-black tracking-wide text-[#0b2545] uppercase mt-0.5 leading-tight">
                 {{ activeLetter?.kop?.desa || 'PEMERINTAH DESA MANDIRI SEJAHTERA' }}
               </h1>
               <h4 class="text-xs sm:text-sm font-bold tracking-wider text-black uppercase mt-0.5">
@@ -107,7 +107,7 @@
           </div>
 
           <!-- Bagian Nomor, Lampiran, dan Perihal Surat -->
-          <div class="mt-6 mb-5 space-y-0.5 text-xs">
+          <div class="mt-4 mb-3 space-y-0.5 text-xs">
             <div class="grid grid-cols-12 gap-1">
               <span class="col-span-3 sm:col-span-2">Nomor :</span>
               <span class="col-span-9 sm:col-span-10 font-mono text-black font-semibold">{{ activeLetter?.letter_number || '470/0001/DMS-SKD/XI/2026' }}</span>
@@ -123,7 +123,7 @@
           </div>
 
           <!-- Penerima / Tujuan Surat -->
-          <div class="my-5 text-xs space-y-0.5">
+          <div class="my-3 text-xs space-y-0.5">
             <p>Kepada Yth Bapak/Ibu</p>
             <p class="font-bold text-black">{{ residentName }} / Pihak Terkait</p>
             <p>Di-</p>
@@ -131,7 +131,7 @@
           </div>
 
           <!-- Isi Tubuh Surat -->
-          <div class="space-y-3.5 text-xs text-justify leading-relaxed">
+          <div class="space-y-2.5 text-xs text-justify leading-relaxed">
             <p class="font-bold">Assalamualaikum Wr. Wb.</p>
 
             <p>
@@ -139,7 +139,7 @@
             </p>
 
             <!-- DAFTAR DATA RESMI WARGA PEMOHON (FORMAT TEKS SEJAJAR RAPI TANPA TABEL) -->
-            <div class="my-4 pl-4 sm:pl-8 space-y-2 text-xs">
+            <div class="my-2.5 pl-4 sm:pl-6 space-y-1.5 text-xs">
               <div class="grid grid-cols-12 gap-1 items-start">
                 <span class="col-span-4 sm:col-span-3 text-slate-800 font-medium">Nama Lengkap</span>
                 <span class="col-span-1 text-center font-bold">:</span>
@@ -179,13 +179,13 @@
           </div>
 
           <!-- Tanda Tangan di Sebelah Kiri Bawah (Persis seperti gambar referensi) -->
-          <div class="mt-8 text-xs text-left space-y-1">
+          <div class="mt-4 text-xs text-left space-y-0.5">
             <p>Mandiri Jaya, {{ activeLetter?.tanggal_terbit || '24 November 2026' }}</p>
             <p>{{ activeLetter?.pejabat?.jabatan || 'Kepala Desa' }},</p>
 
             <!-- QR Code Besar TTE Resmi dengan Lambang di Tengah -->
-            <div class="my-2 inline-block">
-              <div class="w-28 h-28 bg-white p-1 border border-black/30 shadow-2xs relative flex items-center justify-center">
+            <div class="my-1.5 inline-block">
+              <div class="w-22 h-22 sm:w-24 sm:h-24 bg-white p-1 border border-black/30 shadow-2xs relative flex items-center justify-center">
                 <!-- SVG QR Code Matrix dengan logo tengah -->
                 <svg viewBox="0 0 100 100" class="w-full h-full text-black fill-current" xmlns="http://www.w3.org/2000/svg">
                   <!-- Finder patterns -->
@@ -282,10 +282,20 @@ const handlePrint = () => {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 10mm 12mm 10mm 12mm;
+    margin: 8mm 12mm 8mm 12mm;
   }
 
-  /* Sembunyikan elemen latar dan modal backdrop */
+  /* Kunci tinggi html dan body agar tidak ada scroll atau overflow ruang kosong */
+  html, body {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
+  /* Sembunyikan semua elemen selain kontainer kertas surat */
   body * {
     visibility: hidden;
   }
@@ -296,16 +306,22 @@ const handlePrint = () => {
   }
 
   #official-letter-paper {
-    position: absolute;
-    left: 0;
-    top: 0;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
-    padding: 24px !important;
+    padding: 0 !important;
     margin: 0 !important;
     box-shadow: none !important;
     border: none !important;
-    background: #fff !important;
+    background: transparent !important;
+    page-break-before: avoid !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-before: avoid !important;
+    break-after: avoid !important;
+    break-inside: avoid !important;
   }
 }
 </style>
