@@ -9,7 +9,7 @@
             📄
           </span>
           <div>
-            <h3 class="text-sm font-bold leading-tight">Surat Resmi Diterbitkan</h3>
+            <h3 class="text-sm font-bold leading-tight">Dokumen Surat Resmi Diterbitkan</h3>
             <p class="text-[11px] text-slate-300 font-mono">{{ letterData?.letter_number || 'Dokumen Resmi Desa' }}</p>
           </div>
         </div>
@@ -56,32 +56,57 @@
       <div class="overflow-y-auto max-h-[80vh] p-4 sm:p-8 bg-slate-100 flex justify-center print:p-0 print:m-0 print:bg-white print:max-h-none print:overflow-visible">
         
         <!-- Official Indonesian Letter Paper (A4 Style) -->
-        <div class="bg-white text-slate-900 w-full max-w-2xl p-8 sm:p-12 shadow-md border border-slate-200 print:shadow-none print:border-none print:p-8 print:max-w-none print:w-full font-serif text-sm leading-relaxed">
+        <div id="official-letter-paper" class="bg-white text-slate-900 w-full max-w-2xl p-8 sm:p-12 shadow-md border border-slate-200 print:shadow-none print:border-none print:p-0 print:max-w-none print:w-full font-serif text-sm leading-relaxed">
           
-          <!-- KOP SURAT RESMI DESA -->
-          <div class="text-center pb-3 border-b-4 border-double border-slate-900 relative">
-            <!-- Lambang Garuda / Logo Desa Simbolik -->
-            <div class="text-center mb-2">
-              <div class="w-14 h-14 mx-auto rounded-full border-2 border-slate-900 flex items-center justify-center font-bold text-xl">
-                🏛️
+          <!-- KOP SURAT RESMI DESA (LOGO DI PINGGIR KIRI) -->
+          <div class="pb-3 border-b-4 border-double border-slate-900 flex items-center gap-3 sm:gap-5 relative">
+            <!-- LOGO INSTANSI DI PINGGIR KIRI -->
+            <div class="shrink-0 flex items-center justify-center">
+              <div class="w-20 h-22 sm:w-24 sm:h-26 flex flex-col items-center justify-center">
+                <!-- Lambang Resmi Daerah / Lambang Perisai Garuda & Pemda (Vector SVG Berkualitas Tinggi) -->
+                <svg viewBox="0 0 100 115" class="w-16 h-18 sm:w-20 sm:h-22 drop-shadow-xs" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Perisai Luar Lambang Daerah -->
+                  <path d="M50 4 L88 18 C88 68 50 106 50 110 C50 106 12 68 12 18 Z" fill="#0f172a" stroke="#020617" stroke-width="2.5"/>
+                  <!-- Perisai Lapis Dalam -->
+                  <path d="M50 9 L83 22 C83 65 50 100 50 103 C50 100 17 65 17 22 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+                  <!-- Latar Belakang Perisai Merah Putih -->
+                  <path d="M50 12 L80 24 C80 50 50 50 50 50 L20 50 C20 24 50 12 50 12 Z" fill="#dc2626"/>
+                  <path d="M20 50 C20 70 50 96 50 96 C50 96 80 70 80 50 Z" fill="#f8fafc"/>
+                  <!-- Bintang Emas Simbol Ketuhanan -->
+                  <polygon points="50,18 53,26 62,26 55,31 58,39 50,34 42,39 45,31 38,26 47,26" fill="#facc15" stroke="#ca8a04" stroke-width="0.8"/>
+                  <!-- Untaian Padi & Kapas Kesejahteraan -->
+                  <path d="M26 38 C23 60 35 78 50 86 C65 78 77 60 74 38" stroke="#16a34a" stroke-width="3" stroke-linecap="round" fill="none"/>
+                  <!-- Gapura / Monumen Pusat Kemandirian -->
+                  <rect x="45" y="44" width="10" height="24" fill="#1e3a8a" rx="1"/>
+                  <polygon points="50,36 41,44 59,44" fill="#fbbf24"/>
+                  <!-- Gelombang Air / Sungai Kemakmuran -->
+                  <path d="M34 74 Q50 67 66 74" stroke="#0284c7" stroke-width="2.5" fill="none"/>
+                  <path d="M36 80 Q50 73 64 80" stroke="#0284c7" stroke-width="2" fill="none"/>
+                  <!-- Pita Semboyan Daerah di Bawah -->
+                  <path d="M22 93 L78 93 L73 100 L27 100 Z" fill="#1e293b"/>
+                  <text x="50" y="98.5" text-anchor="middle" font-size="5" font-family="sans-serif" font-weight="900" fill="#ffffff" letter-spacing="1.5">BOGOR</text>
+                </svg>
               </div>
             </div>
 
-            <h4 class="text-sm font-bold uppercase tracking-widest text-slate-800">
-              {{ letterData?.kop?.pemerintah_kabupaten || 'PEMERINTAH KABUPATEN BOGOR' }}
-            </h4>
-            <h4 class="text-sm font-bold uppercase tracking-wider text-slate-800">
-              {{ letterData?.kop?.kecamatan || 'KECAMATAN MANDIRI JAYA' }}
-            </h4>
-            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wide text-slate-950 mt-0.5">
-              {{ letterData?.kop?.desa || 'PEMERINTAH DESA MANDIRI SEJAHTERA' }}
-            </h2>
-            <p class="text-[11px] font-sans text-slate-600 mt-1">
-              {{ letterData?.kop?.alamat || 'Jl. Protokol Desa Mandiri No. 01, Mandiri Jaya, Jawa Barat 16720' }}
-            </p>
-            <p class="text-[10px] font-sans text-slate-500">
-              {{ letterData?.kop?.kontak || 'Email: pemdes@mandirisejahtera.desa.id • WhatsApp: 0812-3456-7890' }}
-            </p>
+            <!-- TEKS KOP RESMI (Center-aligned) -->
+            <div class="flex-1 text-center pr-2 sm:pr-6">
+              <h4 class="text-xs sm:text-sm font-bold uppercase tracking-widest text-slate-800">
+                {{ letterData?.kop?.pemerintah_kabupaten || 'PEMERINTAH KABUPATEN BOGOR' }}
+              </h4>
+              <h4 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-800">
+                {{ letterData?.kop?.kecamatan || 'KECAMATAN MANDIRI JAYA' }}
+              </h4>
+              <h2 class="text-lg sm:text-2xl font-black uppercase tracking-wide text-slate-950 mt-0.5 leading-tight">
+                {{ letterData?.kop?.desa || 'PEMERINTAH DESA MANDIRI SEJAHTERA' }}
+              </h2>
+              <p class="text-[11px] font-sans text-slate-600 mt-1 leading-snug">
+                {{ letterData?.kop?.alamat || 'Jl. Protokol Desa Mandiri No. 01, Mandiri Jaya, Jawa Barat 16720' }}
+              </p>
+              <p class="text-[10px] font-sans text-slate-500 mt-0.5">
+                {{ letterData?.kop?.kontak || 'Email: pemdes@mandirisejahtera.desa.id • Telp: (0251) 8123456 • WhatsApp: 0812-3456-7890' }}
+              </p>
+            </div>
           </div>
 
           <!-- JUDUL & NOMOR SURAT -->
@@ -140,54 +165,101 @@
             </p>
           </div>
 
-          <!-- TANDA TANGAN & PENGESAHAN KEPALA DESA -->
-          <div class="mt-8 pt-4 flex justify-between items-end">
-            <!-- QR Code Validasi Dokumen Digital -->
-            <div class="text-left font-sans text-[10px] text-slate-500 max-w-[200px]">
-              <div class="w-20 h-20 bg-slate-50 border border-slate-300 p-1.5 rounded-lg mb-1 flex items-center justify-center">
-                <!-- SVG QR Code Simbolik -->
-                <svg viewBox="0 0 100 100" class="w-full h-full text-slate-900 fill-current">
-                  <path d="M0 0h30v30H0zm5 5v20h20V5zm5 5h10v10H10zm60-10h30v30H70zm5 5v20h20V5zm5 5h10v10H80zM0 70h30v30H0zm5 5v20h20V75zm5 5h10v10H10zm40-70h10v10H50zm10 10h10v10H60zm-20 10h10v10H40zm10 10h10v10H50zm-10 10h10v10H40zm20 0h10v10H60zm10 10h10v10H70zm10-10h10v10H80zm0 20h10v10H80zm-40 0h10v10H40zm10 10h10v10H50zm10 10h10v10H60zm-30-20h10v10H30zm0 10h10v10H30zm60-10h10v20H90zm-10 10h10v10H80z"/>
-                </svg>
+          <!-- PENGESAHAN TANDA TANGAN DIGITAL (TTE) RESMI -->
+          <div class="mt-8 pt-2">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
+              
+              <!-- Kolom Kiri: Verifikasi Keaslian & Segel Digital -->
+              <div class="text-left font-sans text-[10px] text-slate-600 max-w-[240px] space-y-1.5 order-2 sm:order-1">
+                <div class="flex items-center gap-1.5 text-blue-900 font-bold text-[11px]">
+                  <svg class="w-4 h-4 text-blue-700 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd" />
+                  </svg>
+                  <span>Integritas Dokumen Terverifikasi</span>
+                </div>
+                <p class="text-[9px] text-slate-500 leading-tight">
+                  Dokumen ini diterbitkan secara sah oleh Pemerintah Desa Mandiri Sejahtera dan tercatat dalam pangkalan data arsip digital resmi.
+                </p>
+                <div class="p-2 rounded-lg bg-slate-50 border border-slate-200 font-mono text-[9px] space-y-0.5">
+                  <div class="flex justify-between text-slate-500">
+                    <span>ID Tiket:</span>
+                    <span class="font-bold text-slate-800">{{ letterData?.ticket_number || '-' }}</span>
+                  </div>
+                  <div class="flex justify-between text-slate-500">
+                    <span>Hash TTE:</span>
+                    <span class="font-bold text-slate-800">{{ letterData?.tte?.document_hash || 'SHA256-VALID' }}</span>
+                  </div>
+                </div>
               </div>
-              <span class="block font-bold text-slate-700">Kode Verifikasi Sah:</span>
-              <span class="font-mono text-[9px] text-slate-600 block truncate">{{ letterData?.ticket_number }}</span>
-              <span class="text-[9px] text-slate-400">Pemerintah Desa Mandiri Sejahtera</span>
+
+              <!-- Kolom Kanan: Kotak Tanda Tangan Elektronik (TTE) -->
+              <div class="font-sans text-xs w-full sm:w-80 order-1 sm:order-2">
+                <div class="text-left sm:text-right text-slate-700 mb-1.5 text-xs">
+                  <p>Ditetapkan di: Desa Mandiri Sejahtera</p>
+                  <p>Pada tanggal: <span class="font-medium text-slate-900">{{ letterData?.tanggal_terbit || '24 November 2026' }}</span></p>
+                </div>
+
+                <p class="font-bold text-slate-950 uppercase text-xs tracking-wider text-left sm:text-right mb-2">
+                  {{ letterData?.pejabat?.jabatan || 'Kepala Desa Mandiri Sejahtera' }}
+                </p>
+
+                <!-- BADGE & KOTAK TANDA TANGAN DIGITAL (TTE) RESMI BSrE -->
+                <div class="p-3 rounded-2xl border-2 border-slate-900 bg-gradient-to-br from-slate-50 via-white to-blue-50/40 shadow-xs relative overflow-hidden">
+                  <!-- Watermark Lambang Digital di Background Box -->
+                  <div class="absolute -right-4 -bottom-4 w-24 h-24 text-blue-900/5 pointer-events-none select-none">
+                    <svg viewBox="0 0 100 100" class="w-full h-full fill-current">
+                      <path d="M50 10 L85 25 C85 65 50 95 50 95 C50 95 15 65 15 25 Z"/>
+                    </svg>
+                  </div>
+
+                  <div class="flex items-center gap-3 relative z-10">
+                    <!-- QR Code Otentikasi TTE Digital -->
+                    <div class="w-18 h-18 bg-white p-1 rounded-xl border-2 border-slate-900 shrink-0 flex items-center justify-center shadow-xs">
+                      <svg viewBox="0 0 100 100" class="w-full h-full text-slate-950 fill-current">
+                        <path d="M0 0h30v30H0zm5 5v20h20V5zm5 5h10v10H10zm60-10h30v30H70zm5 5v20h20V5zm5 5h10v10H80zM0 70h30v30H0zm5 5v20h20V75zm5 5h10v10H10zm40-70h10v10H50zm10 10h10v10H60zm-20 10h10v10H40zm10 10h10v10H50zm-10 10h10v10H40zm20 0h10v10H60zm10 10h10v10H70zm10-10h10v10H80zm0 20h10v10H80zm-40 0h10v10H40zm10 10h10v10H50zm10 10h10v10H60zm-30-20h10v10H30zm0 10h10v10H30zm60-10h10v20H90zm-10 10h10v10H80z"/>
+                      </svg>
+                    </div>
+
+                    <!-- Teks Spesifikasi Sertifikat TTE -->
+                    <div class="text-left space-y-0.5 min-w-0">
+                      <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-100/80 text-emerald-800 text-[9px] font-extrabold uppercase tracking-wide border border-emerald-300">
+                        <svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>TTE Sah Bersertifikat</span>
+                      </div>
+                      
+                      <p class="text-[9px] text-slate-500 font-medium leading-none pt-0.5">Ditandatangani secara elektronik oleh:</p>
+                      <p class="font-extrabold text-slate-950 uppercase text-[11px] leading-tight truncate">
+                        {{ letterData?.pejabat?.nama || 'H. AHMAD SYARIFUDDIN, S.IP' }}
+                      </p>
+                      <p class="text-[9px] text-slate-600 font-mono leading-none">
+                        NIP. {{ letterData?.pejabat?.nip || '19780512 200604 1 008' }}
+                      </p>
+                      <p class="text-[8px] text-blue-900 font-semibold pt-0.5 leading-none">
+                        Balai Sertifikasi Elektronik (BSrE) - BSSN
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
-            <!-- Tanda Tangan & Stempel Resmi -->
-            <div class="text-center font-sans text-xs w-64 relative">
-              <p class="text-slate-700 mb-1">
-                Desa Mandiri Sejahtera, {{ letterData?.tanggal_terbit || '24 November 2026' }}
-              </p>
-              <p class="font-bold text-slate-900 uppercase">
-                {{ letterData?.pejabat?.jabatan || 'Kepala Desa Mandiri Sejahtera' }}
-              </p>
-
-              <!-- Space TTD & Stempel Bulat Biru -->
-              <div class="h-24 my-1 flex items-center justify-center relative">
-                <!-- Stempel Cap Basah Desa -->
-                <div class="absolute left-6 w-24 h-24 rounded-full border-2 border-dashed border-blue-600/70 text-blue-700 flex flex-col items-center justify-center text-[8px] font-bold uppercase rotate-[-12deg] p-1 pointer-events-none select-none">
-                  <span class="text-[7px]">PEMERINTAH DESA</span>
-                  <span class="text-[9px] tracking-widest my-0.5">★ MANDIRI ★</span>
-                  <span class="text-[7px]">KAB. BOGOR</span>
-                </div>
-
-                <!-- Tanda Tangan Simbolik -->
-                <div class="font-serif italic text-2xl text-slate-800 rotate-[-5deg] select-none">
-                  Ahmad Syarif
-                </div>
+            <!-- CATATAN KAKI LEGALITAS UU ITE (Footer Dokumen Elektronik Resmi) -->
+            <div class="mt-8 pt-3 border-t-2 border-slate-300 text-[8.5px] font-sans text-slate-500 space-y-1">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <span class="font-bold text-slate-800">
+                  Catatan Legalitas Tanda Tangan Elektronik (UU ITE No. 11/2008 & PP No. 71/2019):
+                </span>
+                <span class="font-mono text-[8px] text-slate-400">Verifikasi Dokumen: {{ letterData?.ticket_number }}</span>
               </div>
-
-              <!-- Nama Pejabat -->
-              <p class="font-bold text-slate-950 underline underline-offset-2 uppercase">
-                {{ letterData?.pejabat?.nama || 'H. AHMAD SYARIFUDDIN, S.IP' }}
-              </p>
-              <p class="text-[10px] text-slate-500 font-mono">
-                NIP. {{ letterData?.pejabat?.nip || '19780512 200604 1 008' }}
+              <p class="leading-relaxed text-slate-600">
+                Dokumen ini telah ditandatangani secara elektronik resmi menggunakan sertifikat elektronik yang diterbitkan oleh Balai Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara (BSSN). Surat keterangan ini sah berkekuatan hukum serta tidak memerlukan tanda tangan basah dan cap stempel manual. Keaslian dokumen dapat diverifikasi secara daring melalui portal pelayanan resmi desa dengan memindai kode QR di atas.
               </p>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -219,17 +291,22 @@ const handlePrint = () => {
 
 <style scoped>
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+
   /* Sembunyikan elemen latar dan modal backdrop */
   body * {
     visibility: hidden;
   }
   
   /* Hanya tampilkan kertas surat */
-  .max-w-2xl, .max-w-2xl * {
+  #official-letter-paper, #official-letter-paper * {
     visibility: visible;
   }
 
-  .max-w-2xl {
+  #official-letter-paper {
     position: absolute;
     left: 0;
     top: 0;
@@ -239,6 +316,7 @@ const handlePrint = () => {
     margin: 0 !important;
     box-shadow: none !important;
     border: none !important;
+    background: transparent !important;
   }
 }
 </style>

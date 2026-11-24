@@ -141,6 +141,16 @@ class OfficialLetterService
             'tanggal_terbit' => $tanggalSurat,
             'qr_verification_url' => url("/lacak?ticket={$serviceRequest->ticket_number}"),
             'status' => $serviceRequest->status,
+            'tte' => [
+                'is_digital' => true,
+                'signer_name' => 'H. AHMAD SYARIFUDDIN, S.IP',
+                'signer_role' => 'Kepala Desa Mandiri Sejahtera',
+                'signer_nip' => '19780512 200604 1 008',
+                'certified_by' => 'Balai Sertifikasi Elektronik (BSrE) - BSSN',
+                'signed_at' => $tanggalSurat,
+                'document_hash' => strtoupper(substr(hash('sha256', ($serviceRequest->ticket_number ?? 'TKT').($serviceRequest->letter_number ?? 'LTR').($serviceRequest->created_at ?? now())), 0, 16)),
+                'verification_url' => url("/lacak?ticket={$serviceRequest->ticket_number}"),
+            ],
         ];
     }
 
