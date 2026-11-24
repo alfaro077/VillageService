@@ -55,8 +55,8 @@
       <!-- Scrollable Paper Container -->
       <div class="overflow-y-auto max-h-[85vh] p-4 sm:p-8 bg-slate-200/80 flex justify-center print:p-0 print:m-0 print:bg-white print:max-h-none print:overflow-visible">
         
-        <!-- Official Indonesian Letter Paper (Framed with thin black border exactly as reference image) -->
-        <div id="official-letter-paper" class="bg-white text-black w-full max-w-3xl p-6 sm:p-10 border border-black shadow-lg font-sans text-xs leading-normal print:shadow-none print:max-w-none print:w-full print:border print:border-black print:p-8">
+        <!-- Official Indonesian Letter Paper (Tanpa bingkai pinggir luar) -->
+        <div id="official-letter-paper" class="bg-white text-black w-full max-w-3xl p-6 sm:p-12 shadow-md font-sans text-xs leading-normal print:shadow-none print:max-w-none print:w-full print:border-none print:p-0">
           
           <!-- KOP SURAT RESMI (Logo Biru di Kiri, Nama Instansi di Tengah, Kontak di Kanan) -->
           <div class="flex items-center justify-between gap-3 sm:gap-4 pb-4 border-b border-black/10">
@@ -304,7 +304,7 @@ const handlePrint = () => {
     padding: 24px !important;
     margin: 0 !important;
     box-shadow: none !important;
-    border: 1.5px solid #000 !important;
+    border: none !important;
     background: #fff !important;
   }
 }
