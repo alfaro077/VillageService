@@ -185,49 +185,106 @@
       </div>
 
       <!-- Card Update Status & Catatan Petugas -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 space-y-5">
-        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-800 pb-3 border-b border-slate-100">
-          Tindak Lanjut & Pembaruan Status
-        </h3>
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-slate-800">
+            Tindak Lanjut & Pembaruan Status
+          </h3>
+          <span v-if="detail.status === 'selesai'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            Surat Resmi Selesai & Sah
+          </span>
+        </div>
+
+        <!-- Tombol Aksi Cepat Setujui (Jika belum selesai) -->
+        <div v-if="detail.status !== 'selesai'" class="p-4 rounded-2xl bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm border border-emerald-700">
+          <div class="space-y-1 text-center sm:text-left">
+            <div class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-200">
+              <span>⚡</span> Aksi Cepat Persetujuan
+            </div>
+            <h4 class="text-sm font-bold text-white">Setujui & Selesaikan Permohonan Warga</h4>
+            <p class="text-xs text-emerald-100 max-w-md">
+              Satu klik untuk menyetujui, menerbitkan nomor surat resmi, mengunduh file PDF, dan otomatis membuka pesan WhatsApp ke nomor <strong class="font-mono text-white">{{ detail.phone_number }}</strong>.
+            </p>
+          </div>
+
+          <button
+            @click="handleQuickApprove"
+            :disabled="isSaving"
+            class="px-5 py-3 rounded-xl bg-white hover:bg-emerald-50 text-emerald-900 text-xs font-extrabold transition-all shadow-md flex items-center gap-2 shrink-0 cursor-pointer disabled:opacity-50"
+          >
+            <svg v-if="isSaving" class="animate-spin w-4 h-4 text-emerald-800" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <svg v-else class="w-4 h-4 fill-emerald-700" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            <span>Setujui & Kirim ke WhatsApp</span>
+          </button>
+        </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-medium text-slate-700 mb-1">Ubah Status Pengajuan:</label>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Pilih Status Pengajuan:</label>
             <select
               v-model="statusUpdate"
               class="w-full text-sm bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:ring-2 focus:ring-slate-900"
             >
               <option value="pending">Menunggu (Pending)</option>
               <option value="diproses">Sedang Diproses (Verifikasi / Pembuatan)</option>
-              <option value="selesai">Selesai (Siap Diambil)</option>
+              <option value="selesai">Selesai (Disetujui & Terbitkan Surat)</option>
               <option value="ditolak">Ditolak (Berkas Tidak Sesuai)</option>
             </select>
           </div>
 
           <div class="sm:col-span-2">
             <label class="block text-xs font-medium text-slate-700 mb-1">
-              Catatan untuk Warga (Akan tampil saat warga melacak nomor tiket):
+              Catatan untuk Warga (Akan tampil saat warga melacak nomor tiket dan pada pesan WhatsApp):
             </label>
             <textarea
               v-model="notesUpdate"
               rows="3"
-              placeholder="Contoh: Berkas telah diverifikasi, surat sudah ditandatangani kepala desa dan dapat diambil di loket pelayanan."
+              placeholder="Contoh: Berkas telah diverifikasi lengkap dan surat telah disetujui Kepala Desa."
               class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:ring-2 focus:ring-slate-900"
             ></textarea>
           </div>
         </div>
 
-        <div v-if="saveMessage" class="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl">
-          {{ saveMessage }}
+        <!-- Opsi Otomatis Kirim WhatsApp saat Status Selesai -->
+        <div v-if="statusUpdate === 'selesai'" class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs space-y-2 animate-in fade-in duration-200">
+          <div class="flex items-center gap-2.5">
+            <input
+              type="checkbox"
+              id="auto_send_wa"
+              v-model="autoSendWhatsApp"
+              class="w-4 h-4 text-emerald-600 rounded-md border-emerald-300 focus:ring-emerald-500 cursor-pointer"
+            />
+            <label for="auto_send_wa" class="font-bold text-emerald-900 cursor-pointer text-xs">
+              Otomatis buka WhatsApp & kirimkan berkas PDF resmi ke pemohon saat disimpan
+            </label>
+          </div>
+          <p class="text-[11px] text-emerald-800 pl-6 leading-relaxed">
+            Sistem akan otomatis men-download file PDF resmi dan langsung mengarahkan Anda ke obrolan WhatsApp pemohon (nomor: <strong class="font-mono text-emerald-950">{{ detail.phone_number }}</strong>) dengan tautan berkas PDF dan rincian lengkap surat yang telah diterbitkan.
+          </p>
         </div>
 
-        <div class="flex items-center justify-end">
+        <div v-if="saveMessage" class="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl flex items-center justify-between">
+          <span>{{ saveMessage }}</span>
+          <button @click="saveMessage = ''" class="text-emerald-700 font-bold ml-2">✕</button>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-2">
           <button
-            @click="handleSaveStatus"
+            @click="() => handleSaveStatus()"
             :disabled="isSaving"
-            class="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-md disabled:opacity-50"
+            class="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-md disabled:opacity-50 flex items-center gap-2 cursor-pointer"
           >
-            {{ isSaving ? 'Menyimpan...' : 'Simpan Pembaruan Status' }}
+            <svg v-if="isSaving" class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>{{ isSaving ? 'Menyimpan & Memproses...' : 'Simpan Pembaruan Status' }}</span>
           </button>
         </div>
       </div>
@@ -242,6 +299,60 @@
       :ticketNumber="detail?.ticket_number"
       @close="isLetterModalOpen = false"
     />
+
+    <!-- Modal Konfirmasi Notifikasi WhatsApp Terkirim Otomatis -->
+    <div v-if="isWaNotificationModalOpen" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden p-6 sm:p-8 space-y-5 animate-in fade-in zoom-in-95 duration-200 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center text-3xl shadow-xs">
+          💬
+        </div>
+
+        <div class="space-y-1.5">
+          <h3 class="text-lg font-bold text-slate-900">Surat Selesai & Terkirim ke WhatsApp!</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Status pengajuan warga telah berhasil disetujui. Obrolan WhatsApp resmi telah dibuka dan berkas dokumen PDF otomatis terunduh.
+          </p>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-left space-y-2.5 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 font-medium">Nomor WhatsApp:</span>
+            <span class="font-bold font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">{{ lastDispatchedPhone }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 font-medium">Berkas PDF:</span>
+            <span class="font-bold text-slate-900 font-mono text-[11px] truncate max-w-[200px]" :title="lastDownloadedPdfName">
+              {{ lastDownloadedPdfName }}
+            </span>
+          </div>
+          <div class="pt-2 border-t border-slate-200 text-[11px] text-slate-600 leading-relaxed flex items-start gap-1.5">
+            <span class="text-emerald-600 shrink-0">📎</span>
+            <span>File PDF surat resmi otomatis tersimpan di folder Unduhan komputer Anda. Anda dapat langsung melampirkannya (drag-and-drop) ke obrolan WhatsApp yang telah terbuka.</span>
+          </div>
+        </div>
+
+        <div class="space-y-2 pt-2">
+          <a
+            v-if="lastDispatchedWaUrl"
+            :href="lastDispatchedWaUrl"
+            target="_blank"
+            class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            <span>Buka Ulang WhatsApp Pemohon</span>
+          </a>
+
+          <button
+            @click="isWaNotificationModalOpen = false"
+            class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer"
+          >
+            Tutup Dialog
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -265,6 +376,12 @@ const letterData = ref(null);
 const isLetterLoading = ref(false);
 const isDownloadingPdf = ref(false);
 const isSendingWhatsapp = ref(false);
+
+const autoSendWhatsApp = ref(true);
+const isWaNotificationModalOpen = ref(false);
+const lastDispatchedWaUrl = ref('');
+const lastDispatchedPhone = ref('');
+const lastDownloadedPdfName = ref('');
 
 const cleanPhone = (phone) => {
   if (!phone) return '';
@@ -371,7 +488,13 @@ const handleSendPdfToWhatsApp = async () => {
   isSendingWhatsapp.value = false;
 };
 
+const handleQuickApprove = async () => {
+  statusUpdate.value = 'selesai';
+  await handleSaveStatus();
+};
+
 const handleSaveStatus = async () => {
+  if (!detail.value?.id) return;
   isSaving.value = true;
   saveMessage.value = '';
   try {
@@ -379,14 +502,40 @@ const handleSaveStatus = async () => {
     if (res.success) {
       detail.value = res.data;
       if (res.data.status === 'selesai') {
-        saveMessage.value = 'Status permohonan diselesaikan! Nomor surat resmi telah diterbitkan dan notifikasi WhatsApp siap dikirim.';
+        saveMessage.value = 'Status permohonan diselesaikan dan surat resmi berhasil diterbitkan!';
+
+        // Jika opsi otomatis kirim WhatsApp aktif
+        if (autoSendWhatsApp.value) {
+          const waUrl = res.data.whatsapp?.whatsapp_url;
+          const phone = res.data.phone_number || res.data.whatsapp?.raw_phone;
+          const filename = getPdfFilename();
+
+          lastDispatchedWaUrl.value = waUrl || '';
+          lastDispatchedPhone.value = phone || '';
+          lastDownloadedPdfName.value = filename;
+
+          // 1. Otomatis unduh dokumen PDF resmi ke perangkat admin
+          try {
+            await adminService.downloadServicePdf(detail.value.id, filename);
+          } catch (pdfErr) {
+            console.warn('Gagal auto-download berkas PDF:', pdfErr);
+          }
+
+          // 2. Otomatis buka obrolan WhatsApp pemohon
+          if (waUrl) {
+            window.open(waUrl, '_blank');
+          }
+
+          // 3. Tampilkan dialog sukses konfirmasi WhatsApp
+          isWaNotificationModalOpen.value = true;
+        }
       } else {
         saveMessage.value = 'Pembaruan status dan catatan untuk warga berhasil disimpan!';
       }
-      setTimeout(() => (saveMessage.value = ''), 4000);
+      setTimeout(() => (saveMessage.value = ''), 8000);
     }
   } catch (err) {
-    alert('Gagal memperbarui status.');
+    alert(err.response?.data?.message || 'Gagal memperbarui status.');
   } finally {
     isSaving.value = false;
   }

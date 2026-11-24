@@ -73,12 +73,18 @@ class OfficialLetterService
         $trackingUrl = url("/lacak?ticket={$ticket}");
         $pdfUrl = url("/api/v1/public/track/{$ticket}/pdf");
 
+        $notesPart = '';
+        if (! empty($serviceRequest->admin_notes)) {
+            $notesPart = "• Catatan Petugas: {$serviceRequest->admin_notes}\n";
+        }
+
         $message = "Yth. Bapak/Ibu *{$fullName}*,\n\n"
             ."Pemberitahuan dari *Pemerintah Desa Mandiri Sejahtera*:\n"
-            ."Permohonan surat Anda dengan nomor tiket *{$ticket}* telah *SELESAI* diproses.\n\n"
+            ."Permohonan surat Anda dengan nomor tiket *{$ticket}* telah *SELESAI* diproses dan disetujui.\n\n"
             ."*Rincian Surat:*\n"
             ."• Jenis Surat: {$serviceName}\n"
-            ."• Nomor Surat Resmi: {$letterNumber}\n\n"
+            ."• Nomor Surat Resmi: {$letterNumber}\n"
+            .$notesPart."\n"
             ."📄 *Unduh Berkas Surat Resmi (Format PDF):*\n"
             ."{$pdfUrl}\n\n"
             ."Portal Lacak & Status Layanan:\n"
