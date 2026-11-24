@@ -135,45 +135,36 @@
             <p class="font-bold">Assalamualaikum Wr. Wb.</p>
 
             <p>
-              Kami Kepala Desa Mandiri Sejahtera, Kecamatan Mandiri Jaya, Kabupaten Bogor menerangkan bahwa warga berikut untuk melaksanakan pengurusan administrasi kependudukan resmi :
+              Kepala Desa Mandiri Sejahtera, Kecamatan Mandiri Jaya, Kabupaten Bogor, Provinsi Jawa Barat dengan ini menerangkan bahwa:
             </p>
 
-            <!-- TABEL DATA RESMI WARGA (NIK, NO KK, NAMA TERDEKRIPSI LENGKAP & JELAS) -->
-            <div class="my-3 overflow-x-auto">
-              <table class="w-full border-collapse border border-black text-xs">
-                <thead>
-                  <tr class="bg-white">
-                    <th class="border border-black px-3 py-2 text-center font-bold text-black uppercase w-1/3">NAMA PEMOHON</th>
-                    <th class="border border-black px-3 py-2 text-center font-bold text-black uppercase w-1/3">NIK</th>
-                    <th class="border border-black px-3 py-2 text-center font-bold text-black uppercase w-1/3">NO. KK</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="border border-black px-3 py-2.5 font-bold text-black uppercase text-center">
-                      {{ residentName }}
-                    </td>
-                    <td class="border border-black px-3 py-2.5 font-mono font-bold text-center text-black tracking-wider text-xs">
-                      {{ residentNik }}
-                    </td>
-                    <td class="border border-black px-3 py-2.5 font-mono font-bold text-center text-black tracking-wider text-xs">
-                      {{ residentKk }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="border border-black px-3 py-2 font-bold text-black bg-slate-50/50">ALAMAT DOMISILI</td>
-                    <td colspan="2" class="border border-black px-3 py-2 text-black leading-relaxed">
-                      {{ residentAddress }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="border border-black px-3 py-2 font-bold text-black bg-slate-50/50">KEPERLUAN</td>
-                    <td colspan="2" class="border border-black px-3 py-2 text-black font-semibold">
-                      {{ residentPurpose }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <!-- DAFTAR DATA RESMI WARGA PEMOHON (FORMAT TEKS SEJAJAR RAPI TANPA TABEL) -->
+            <div class="my-4 pl-4 sm:pl-8 space-y-2 text-xs">
+              <div class="grid grid-cols-12 gap-1 items-start">
+                <span class="col-span-4 sm:col-span-3 text-slate-800 font-medium">Nama Lengkap</span>
+                <span class="col-span-1 text-center font-bold">:</span>
+                <span class="col-span-7 sm:col-span-8 font-bold text-black uppercase">{{ residentName }}</span>
+              </div>
+              <div class="grid grid-cols-12 gap-1 items-start">
+                <span class="col-span-4 sm:col-span-3 text-slate-800 font-medium">Nomor Induk Kependudukan (NIK)</span>
+                <span class="col-span-1 text-center font-bold">:</span>
+                <span class="col-span-7 sm:col-span-8 font-mono font-bold text-black tracking-wider">{{ residentNik }}</span>
+              </div>
+              <div class="grid grid-cols-12 gap-1 items-start">
+                <span class="col-span-4 sm:col-span-3 text-slate-800 font-medium">Nomor Kartu Keluarga (No KK)</span>
+                <span class="col-span-1 text-center font-bold">:</span>
+                <span class="col-span-7 sm:col-span-8 font-mono font-bold text-black tracking-wider">{{ residentKk }}</span>
+              </div>
+              <div class="grid grid-cols-12 gap-1 items-start">
+                <span class="col-span-4 sm:col-span-3 text-slate-800 font-medium">Alamat Domisili</span>
+                <span class="col-span-1 text-center font-bold">:</span>
+                <span class="col-span-7 sm:col-span-8 text-black leading-relaxed">{{ residentAddress }}</span>
+              </div>
+              <div class="grid grid-cols-12 gap-1 items-start">
+                <span class="col-span-4 sm:col-span-3 text-slate-800 font-medium">Keperluan Surat</span>
+                <span class="col-span-1 text-center font-bold">:</span>
+                <span class="col-span-7 sm:col-span-8 font-semibold text-black">{{ residentPurpose }}</span>
+              </div>
             </div>
 
             <p>
