@@ -37,6 +37,14 @@ export const adminService = {
   },
 
   /**
+   * Dapatkan dokumen surat resmi dan notifikasi WhatsApp untuk pengajuan surat.
+   */
+  async getServiceLetter(id) {
+    const response = await api.get(`/admin/services/${id}/letter`);
+    return response.data.data;
+  },
+
+  /**
    * Dapatkan daftar laporan pengaduan warga.
    */
   async getComplaints(params = {}) {

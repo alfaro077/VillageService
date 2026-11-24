@@ -21,6 +21,8 @@ class PublicTrackingResource extends JsonResource
             'type' => $isService ? 'service' : 'complaint',
             'title' => $isService ? ($this->serviceType->name ?? 'Layanan Surat') : ($this->category ?? 'Pengaduan Warga'),
             'status' => $this->status,
+            'letter_number' => $isService ? $this->letter_number : null,
+            'can_download_letter' => $isService && $this->status === 'selesai',
             'notes' => $isService ? $this->admin_notes : $this->admin_response,
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),

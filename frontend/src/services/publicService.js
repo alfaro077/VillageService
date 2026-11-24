@@ -117,5 +117,14 @@ export const publicService = {
     const response = await api.get(`/public/track/${encodeURIComponent(clean)}`);
     return response.data.data;
   },
+
+  /**
+   * Dapatkan dokumen surat resmi digital yang telah selesai diterbitkan via tiket.
+   */
+  async getPublicLetter(ticketNumber) {
+    const clean = ticketNumber.trim().toUpperCase();
+    const response = await api.get(`/public/track/${encodeURIComponent(clean)}/letter`);
+    return response.data.data;
+  },
 };
 

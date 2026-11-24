@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Public\PublicTrackingResource;
 use App\Models\Complaint;
 use App\Models\ServiceRequest;
+use App\Services\OfficialLetterService;
 use Illuminate\Http\JsonResponse;
 
 class TrackingController extends Controller
 {
+    public function __construct(protected OfficialLetterService $letterService) {}
+
     /**
      * Lacak status pengajuan surat atau pengaduan warga via nomor tiket.
      * DILARANG KERAS mengembalikan data pribadi warga (NIK, Nama, KK, Alamat, dll).
@@ -68,6 +71,46 @@ class TrackingController extends Controller
         return response()->json([
             'success' => true,
             'data' => new PublicTrackingResource($item),
+        ]);
+    }
+
+    /**
+     * Dapatkan dokumen surat resmi digital untuk pengajuan yang telah dinyatakan selesai.
+     */
+    public function getPublicLetter(string $ticket): JsonResponse
+    {
+        $cleanTicket = strtoupper(trim($ticket));
+
+        $serviceRequest = ServiceRequest::with('serviceType')
+            ->where('ticket_number', $cleanTicket)
+            ->first();
+
+        if (! $serviceRequest) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Surat permohonan dengan nomor tiket tersebut tidak ditemukan.',
+            ], 404);
+        }
+
+        if ($serviceRequest->status !== 'selesai') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Surat resmi belum dapat diterbitkan karena permohonan belum berstatus Selesai.',
+            ], 403);
+        }
+
+        if (empty($serviceRequest->letter_number)) {
+            $serviceRequest->update([
+                'letter_number' => $this->letterService->generateLetterNumber($serviceRequest),
+                'letter_generated_at' => now(),
+            ]);
+        }
+
+        $letterDoc = $this->letterService->buildLetterDocument($serviceRequest);
+
+        return response()->json([
+            'success' => true,
+            'data' => $letterDoc,
         ]);
     }
 }

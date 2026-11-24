@@ -61,6 +61,37 @@
           </div>
         </div>
 
+        <!-- Card Surat Resmi Diterbitkan (Jika Selesai) -->
+        <div v-if="result.can_download_letter" class="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 border border-slate-800">
+          <div class="space-y-1.5 text-center sm:text-left">
+            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              Surat Digital Resmi Telah Terbit
+            </div>
+            <h3 class="text-base font-bold font-mono text-white">
+              No. Surat: {{ result.letter_number || '470/.../DMS/2026' }}
+            </h3>
+            <p class="text-xs text-slate-300 max-w-lg">
+              Surat permohonan Anda telah selesai disetujui dan ditandatangani oleh Kepala Desa. Anda dapat langsung melihat, mencetak, atau menyimpannya sebagai file PDF di sini.
+            </p>
+          </div>
+
+          <button
+            @click="openLetterModal"
+            :disabled="isLetterLoading"
+            class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2 shrink-0 cursor-pointer disabled:opacity-50"
+          >
+            <svg v-if="isLetterLoading" class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>{{ isLetterLoading ? 'Memuat Dokumen...' : 'Lihat & Unduh Surat Resmi (PDF)' }}</span>
+          </button>
+        </div>
+
         <!-- Catatan Resmi Petugas -->
         <div class="p-5 rounded-2xl border" :class="notesCardClass">
           <h4 class="text-xs font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
@@ -85,6 +116,13 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal Cetak Dokumen Surat Resmi Warga -->
+    <OfficialLetterModal
+      :isOpen="isLetterModalOpen"
+      :letterData="letterData"
+      @close="isLetterModalOpen = false"
+    />
   </div>
 </template>
 
@@ -93,12 +131,17 @@ import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { publicService } from '../../services/publicService';
 import StatusBadge from '../../components/common/StatusBadge.vue';
+import OfficialLetterModal from '../../components/common/OfficialLetterModal.vue';
 
 const route = useRoute();
 const ticketInput = ref('');
 const isLoading = ref(false);
 const errorMsg = ref('');
 const result = ref(null);
+
+const isLetterModalOpen = ref(false);
+const letterData = ref(null);
+const isLetterLoading = ref(false);
 
 const formatDate = (isoStr) => {
   if (!isoStr) return '-';
@@ -134,6 +177,20 @@ const handleTrack = async () => {
     errorMsg.value = err.response?.data?.message || 'Nomor tiket tidak ditemukan atau tidak valid.';
   } finally {
     isLoading.value = false;
+  }
+};
+
+const openLetterModal = async () => {
+  if (!result.value?.ticket_number) return;
+  isLetterLoading.value = true;
+  try {
+    const data = await publicService.getPublicLetter(result.value.ticket_number);
+    letterData.value = data;
+    isLetterModalOpen.value = true;
+  } catch (err) {
+    alert(err.response?.data?.message || 'Gagal memuat dokumen surat resmi.');
+  } finally {
+    isLetterLoading.value = false;
   }
 };
 

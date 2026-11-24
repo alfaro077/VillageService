@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Admin;
 
+use App\Services\OfficialLetterService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,6 +15,9 @@ class AdminServiceRequestResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $letterService = app(OfficialLetterService::class);
+        $whatsappData = $letterService->buildWhatsAppNotification($this->resource);
+
         return [
             'id' => $this->id,
             'ticket_number' => $this->ticket_number,
@@ -30,10 +34,13 @@ class AdminServiceRequestResource extends JsonResource
             'address' => $this->address,
             'purpose_description' => $this->purpose_description,
             'status' => $this->status,
+            'letter_number' => $this->letter_number,
+            'letter_generated_at' => $this->letter_generated_at?->toIso8601String(),
             'admin_notes' => $this->admin_notes,
             'processed_by' => $this->processor?->name,
             'processed_at' => $this->processed_at?->toIso8601String(),
             'created_at' => $this->created_at?->toIso8601String(),
+            'whatsapp' => $whatsappData,
             'documents' => $this->documents->map(fn ($doc) => [
                 'id' => $doc->id,
                 'document_type' => $doc->document_type,

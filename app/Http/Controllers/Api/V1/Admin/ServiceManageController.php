@@ -7,12 +7,16 @@ use App\Http\Resources\Admin\AdminServiceRequestResource;
 use App\Models\ActivityLog;
 use App\Models\ServiceRequest;
 use App\Services\CryptoService;
+use App\Services\OfficialLetterService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ServiceManageController extends Controller
 {
-    public function __construct(protected CryptoService $cryptoService) {}
+    public function __construct(
+        protected CryptoService $cryptoService,
+        protected OfficialLetterService $letterService
+    ) {}
 
     /**
      * Tampilkan daftar pengajuan surat (dengan paginasi dan filter).
@@ -98,12 +102,24 @@ class ServiceManageController extends Controller
             ], 404);
         }
 
-        $serviceRequest->update([
+        $updateData = [
             'status' => $validated['status'],
             'admin_notes' => $validated['admin_notes'] ?? $serviceRequest->admin_notes,
             'processed_by' => $request->user()->id,
             'processed_at' => now(),
-        ]);
+        ];
+
+        // Jika status selesai, otomatis terbitkan nomor surat resmi jika belum ada
+        if ($validated['status'] === 'selesai') {
+            if (empty($serviceRequest->letter_number)) {
+                $updateData['letter_number'] = $this->letterService->generateLetterNumber($serviceRequest);
+            }
+            if (empty($serviceRequest->letter_generated_at)) {
+                $updateData['letter_generated_at'] = now();
+            }
+        }
+
+        $serviceRequest->update($updateData);
 
         ActivityLog::log(
             $request,
@@ -112,10 +128,46 @@ class ServiceManageController extends Controller
             $serviceRequest
         );
 
+        $fresh = $serviceRequest->fresh(['serviceType', 'processor', 'documents']);
+
         return response()->json([
             'success' => true,
             'message' => 'Status pengajuan berhasil diperbarui.',
-            'data' => new AdminServiceRequestResource($serviceRequest->fresh(['serviceType', 'processor', 'documents'])),
+            'data' => new AdminServiceRequestResource($fresh),
+        ]);
+    }
+
+    /**
+     * Dapatkan data lengkap dokumen surat resmi dan link WhatsApp untuk dicetak/dikirim.
+     */
+    public function getLetter(Request $request, int $id): JsonResponse
+    {
+        $serviceRequest = ServiceRequest::with(['serviceType', 'processor'])->find($id);
+
+        if (! $serviceRequest) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengajuan surat tidak ditemukan.',
+            ], 404);
+        }
+
+        // Jika belum memiliki nomor surat (misal baru mau dicetak), generate nomor surat
+        if (empty($serviceRequest->letter_number)) {
+            $serviceRequest->update([
+                'letter_number' => $this->letterService->generateLetterNumber($serviceRequest),
+                'letter_generated_at' => now(),
+            ]);
+        }
+
+        $letterDoc = $this->letterService->buildLetterDocument($serviceRequest);
+        $whatsapp = $this->letterService->buildWhatsAppNotification($serviceRequest);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'document' => $letterDoc,
+                'whatsapp' => $whatsapp,
+            ],
         ]);
     }
 }

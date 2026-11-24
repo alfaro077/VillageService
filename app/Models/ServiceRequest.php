@@ -25,6 +25,8 @@ class ServiceRequest extends Model
         'purpose_description',
         'nik_blind_index',
         'status',
+        'letter_number',
+        'letter_generated_at',
         'admin_notes',
         'processed_by',
         'processed_at',
@@ -45,6 +47,7 @@ class ServiceRequest extends Model
             'phone_number' => 'encrypted',
             'address' => 'encrypted',
             'purpose_description' => 'encrypted',
+            'letter_generated_at' => 'datetime',
             'processed_at' => 'datetime',
         ];
     }

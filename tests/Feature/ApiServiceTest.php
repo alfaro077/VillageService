@@ -228,16 +228,33 @@ class ApiServiceTest extends TestCase
             ->assertJsonPath('data.full_name', 'Siti Aisyah')
             ->assertJsonPath('data.phone_number', '081299887766');
 
-        // Update status pengajuan
+        // Update status pengajuan ke selesai -> otomatis menghasilkan nomor surat resmi dan notifikasi WhatsApp
         $updateResponse = $this->withHeader('Authorization', 'Bearer '.$token)
             ->patchJson('/api/v1/admin/services/'.$request->id.'/status', [
-                'status' => 'diproses',
-                'admin_notes' => 'Dokumen sudah lengkap, menunggu penandatanganan kepala desa.',
+                'status' => 'selesai',
+                'admin_notes' => 'Surat resmi telah selesai diterbitkan.',
             ]);
 
         $updateResponse->assertStatus(200)
-            ->assertJsonPath('data.status', 'diproses')
-            ->assertJsonPath('data.admin_notes', 'Dokumen sudah lengkap, menunggu penandatanganan kepala desa.');
+            ->assertJsonPath('data.status', 'selesai')
+            ->assertJsonPath('data.admin_notes', 'Surat resmi telah selesai diterbitkan.');
+
+        $this->assertNotNull($updateResponse->json('data.letter_number'));
+        $this->assertStringContainsString('6281299887766', $updateResponse->json('data.whatsapp.whatsapp_url'));
+
+        // Admin dapat melihat dokumen surat resmi
+        $letterResponse = $this->withHeader('Authorization', 'Bearer '.$token)
+            ->getJson('/api/v1/admin/services/'.$request->id.'/letter');
+
+        $letterResponse->assertStatus(200)
+            ->assertJsonPath('success', true)
+            ->assertJsonStructure(['data' => ['document', 'whatsapp']]);
+
+        // Warga dapat mengunduh dokumen surat resmi via tiket publik
+        $publicLetterResponse = $this->getJson('/api/v1/public/track/'.$request->ticket_number.'/letter');
+        $publicLetterResponse->assertStatus(200)
+            ->assertJsonPath('success', true)
+            ->assertJsonPath('data.letter_title', 'SURAT KETERANGAN DOMISILI');
     }
 
     /**
