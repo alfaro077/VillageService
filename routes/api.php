@@ -40,6 +40,7 @@ Route::prefix('v1')->group(function () {
         Route::middleware('throttle:30,1')->group(function () {
             Route::get('/track/{ticket}', [TrackingController::class, 'track']);
             Route::get('/track/{ticket}/letter', [TrackingController::class, 'getPublicLetter']);
+            Route::get('/track/{ticket}/pdf', [TrackingController::class, 'downloadPublicPdf']);
         });
     });
 
@@ -62,6 +63,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/services', [ServiceManageController::class, 'index']);
         Route::get('/services/{id}', [ServiceManageController::class, 'show']);
         Route::get('/services/{id}/letter', [ServiceManageController::class, 'getLetter']);
+        Route::get('/services/{id}/pdf', [ServiceManageController::class, 'downloadPdf']);
         Route::patch('/services/{id}/status', [ServiceManageController::class, 'updateStatus']);
 
         // Manajemen Pengaduan Warga

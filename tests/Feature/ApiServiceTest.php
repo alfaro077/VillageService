@@ -255,6 +255,17 @@ class ApiServiceTest extends TestCase
         $publicLetterResponse->assertStatus(200)
             ->assertJsonPath('success', true)
             ->assertJsonPath('data.letter_title', 'SURAT KETERANGAN DOMISILI');
+
+        // Admin dapat mengunduh berkas PDF resmi langsung
+        $adminPdfResponse = $this->withHeader('Authorization', 'Bearer '.$token)
+            ->get('/api/v1/admin/services/'.$request->id.'/pdf');
+        $adminPdfResponse->assertStatus(200)
+            ->assertHeader('content-type', 'application/pdf');
+
+        // Warga dapat mengunduh berkas PDF resmi via nomor tiket
+        $publicPdfResponse = $this->get('/api/v1/public/track/'.$request->ticket_number.'/pdf');
+        $publicPdfResponse->assertStatus(200)
+            ->assertHeader('content-type', 'application/pdf');
     }
 
     /**

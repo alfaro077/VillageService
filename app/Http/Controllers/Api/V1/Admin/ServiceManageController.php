@@ -10,6 +10,7 @@ use App\Services\CryptoService;
 use App\Services\OfficialLetterService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ServiceManageController extends Controller
 {
@@ -169,5 +170,33 @@ class ServiceManageController extends Controller
                 'whatsapp' => $whatsapp,
             ]),
         ]);
+    }
+
+    /**
+     * Unduh berkas PDF resmi permohonan surat dari sesi admin.
+     */
+    public function downloadPdf(int $id): Response
+    {
+        $serviceRequest = ServiceRequest::with(['serviceType', 'processor'])->find($id);
+
+        if (! $serviceRequest) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengajuan surat tidak ditemukan.',
+            ], 404);
+        }
+
+        if (empty($serviceRequest->letter_number)) {
+            $serviceRequest->update([
+                'letter_number' => $this->letterService->generateLetterNumber($serviceRequest),
+                'letter_generated_at' => now(),
+            ]);
+        }
+
+        $pdf = $this->letterService->generatePdf($serviceRequest);
+        $cleanLetterNo = str_replace(['/', '\\', ' '], '_', (string) $serviceRequest->letter_number);
+        $filename = "Surat_{$cleanLetterNo}.pdf";
+
+        return $pdf->download($filename);
     }
 }

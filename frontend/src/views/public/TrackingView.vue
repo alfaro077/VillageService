@@ -76,20 +76,39 @@
             </p>
           </div>
 
-          <button
-            @click="openLetterModal"
-            :disabled="isLetterLoading"
-            class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2 shrink-0 cursor-pointer disabled:opacity-50"
-          >
-            <svg v-if="isLetterLoading" class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <span>{{ isLetterLoading ? 'Memuat Dokumen...' : 'Lihat & Unduh Surat Resmi (PDF)' }}</span>
-          </button>
+          <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+            <button
+              @click="openLetterModal"
+              :disabled="isLetterLoading"
+              class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50 border border-slate-700"
+            >
+              <svg v-if="isLetterLoading" class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <span>Preview Surat</span>
+            </button>
+
+            <button
+              @click="handleDirectDownloadPdf"
+              :disabled="isDownloadingPdf"
+              class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              title="Unduh berkas dokumen PDF resmi"
+            >
+              <svg v-if="isDownloadingPdf" class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Unduh File PDF</span>
+            </button>
+          </div>
         </div>
 
         <!-- Catatan Resmi Petugas -->
@@ -121,6 +140,7 @@
     <OfficialLetterModal
       :isOpen="isLetterModalOpen"
       :letterData="letterData"
+      :ticketNumber="result?.ticket_number"
       @close="isLetterModalOpen = false"
     />
   </div>
@@ -142,6 +162,7 @@ const result = ref(null);
 const isLetterModalOpen = ref(false);
 const letterData = ref(null);
 const isLetterLoading = ref(false);
+const isDownloadingPdf = ref(false);
 
 const formatDate = (isoStr) => {
   if (!isoStr) return '-';
@@ -191,6 +212,21 @@ const openLetterModal = async () => {
     alert(err.response?.data?.message || 'Gagal memuat dokumen surat resmi.');
   } finally {
     isLetterLoading.value = false;
+  }
+};
+
+const handleDirectDownloadPdf = async () => {
+  if (!result.value?.ticket_number) return;
+  isDownloadingPdf.value = true;
+  const cleanNo = (result.value.letter_number || result.value.ticket_number).replace(/[^a-zA-Z0-9]/g, '_');
+  const filename = `Surat_Resmi_${cleanNo}.pdf`;
+  try {
+    await publicService.downloadPublicPdf(result.value.ticket_number, filename);
+  } catch (err) {
+    console.error('Gagal unduh file PDF:', err);
+    alert('Gagal mengunduh berkas PDF resmi.');
+  } finally {
+    isDownloadingPdf.value = false;
   }
 };
 

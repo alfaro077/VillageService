@@ -8,6 +8,7 @@ use App\Models\Complaint;
 use App\Models\ServiceRequest;
 use App\Services\OfficialLetterService;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class TrackingController extends Controller
 {
@@ -112,5 +113,44 @@ class TrackingController extends Controller
             'success' => true,
             'data' => $letterDoc,
         ]);
+    }
+
+    /**
+     * Unduh file PDF asli dokumen surat resmi via nomor tiket publik.
+     */
+    public function downloadPublicPdf(string $ticket): Response
+    {
+        $cleanTicket = strtoupper(trim($ticket));
+
+        $serviceRequest = ServiceRequest::with('serviceType')
+            ->where('ticket_number', $cleanTicket)
+            ->first();
+
+        if (! $serviceRequest) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Surat permohonan dengan nomor tiket tersebut tidak ditemukan.',
+            ], 404);
+        }
+
+        if ($serviceRequest->status !== 'selesai') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Surat resmi belum dapat diunduh karena permohonan belum berstatus Selesai.',
+            ], 403);
+        }
+
+        if (empty($serviceRequest->letter_number)) {
+            $serviceRequest->update([
+                'letter_number' => $this->letterService->generateLetterNumber($serviceRequest),
+                'letter_generated_at' => now(),
+            ]);
+        }
+
+        $pdf = $this->letterService->generatePdf($serviceRequest);
+        $cleanLetterNo = str_replace(['/', '\\', ' '], '_', (string) $serviceRequest->letter_number);
+        $filename = "Surat_{$cleanLetterNo}.pdf";
+
+        return $pdf->download($filename);
     }
 }

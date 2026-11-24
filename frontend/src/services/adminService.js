@@ -45,6 +45,25 @@ export const adminService = {
   },
 
   /**
+   * Unduh file PDF dokumen resmi pengajuan layanan (Blob download).
+   */
+  async downloadServicePdf(id, filename = 'surat_resmi.pdf') {
+    const response = await api.get(`/admin/services/${id}/pdf`, {
+      responseType: 'blob',
+    });
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+    return blob;
+  },
+
+  /**
    * Dapatkan daftar laporan pengaduan warga.
    */
   async getComplaints(params = {}) {

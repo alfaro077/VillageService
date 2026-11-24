@@ -14,29 +14,52 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-2">
-          <!-- WhatsApp Button (if available) -->
-          <a
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Tombol Kirim File PDF ke WhatsApp -->
+          <button
             v-if="effectiveWhatsappUrl"
-            :href="effectiveWhatsappUrl"
-            target="_blank"
-            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-sm"
+            @click="handleSendPdfToWhatsApp"
+            :disabled="isSendingWhatsapp"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer disabled:opacity-50"
+            title="Otomatis unduh berkas PDF dan buka WhatsApp pemohon"
           >
-            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+            <svg v-if="isSendingWhatsapp" class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <svg v-else class="w-4 h-4 fill-current" viewBox="0 0 24 24">
               <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
             </svg>
-            <span>Kirim ke WhatsApp</span>
-          </a>
+            <span>Kirim File PDF ke WhatsApp</span>
+          </button>
 
-          <!-- Print / Download PDF Button -->
+          <!-- Tombol Unduh File PDF Asli Langsung -->
+          <button
+            @click="handleDownloadPdf"
+            :disabled="isDownloadingPdf"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer disabled:opacity-50"
+            title="Unduh langsung berkas .pdf resmi desa"
+          >
+            <svg v-if="isDownloadingPdf" class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>Unduh File PDF</span>
+          </button>
+
+          <!-- Tombol Cetak Dialog Browser -->
           <button
             @click="handlePrint"
-            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+            class="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition-all shadow-sm cursor-pointer border border-slate-700"
+            title="Cetak lewat dialog peramban"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
             </svg>
-            <span>Cetak / Simpan PDF</span>
+            <span>Cetak</span>
           </button>
 
           <!-- Close Button -->
@@ -50,6 +73,15 @@
             </svg>
           </button>
         </div>
+      </div>
+
+      <!-- Banner Panduan Pengiriman Dokumen PDF ke WhatsApp -->
+      <div v-if="noticeMessage" class="px-6 py-3 bg-emerald-50 border-b border-emerald-200 text-emerald-900 text-xs flex items-center justify-between gap-3 animate-in fade-in duration-200 print:hidden">
+        <div class="flex items-center gap-2">
+          <span class="text-base shrink-0">📎</span>
+          <p class="font-medium leading-relaxed">{{ noticeMessage }}</p>
+        </div>
+        <button @click="noticeMessage = ''" class="text-emerald-700 hover:text-emerald-950 font-bold text-xs shrink-0 cursor-pointer">✕</button>
       </div>
 
       <!-- Scrollable Paper Container -->
@@ -218,7 +250,9 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
+import { adminService } from '../../services/adminService';
+import { publicService } from '../../services/publicService';
 
 const props = defineProps({
   isOpen: {
@@ -233,9 +267,21 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  serviceId: {
+    type: [Number, String],
+    default: null,
+  },
+  ticketNumber: {
+    type: String,
+    default: '',
+  },
 });
 
 defineEmits(['close']);
+
+const isDownloadingPdf = ref(false);
+const isSendingWhatsapp = ref(false);
+const noticeMessage = ref('');
 
 // Dapatkan objek data surat resmi (menangani jika response dari backend dibungkus { document: ..., whatsapp: ... } ataupun objek langsung)
 const activeLetter = computed(() => {
@@ -272,6 +318,84 @@ const residentPurpose = computed(() => {
 const effectiveWhatsappUrl = computed(() => {
   return props.whatsappUrl || activeLetter.value?.whatsapp?.whatsapp_url || props.letterData?.whatsapp?.whatsapp_url || '';
 });
+
+const getFilename = () => {
+  const name = residentName.value !== '-' ? residentName.value.replace(/[^a-zA-Z0-9]/g, '_') : 'Warga';
+  const cleanNo = (activeLetter.value?.letter_number || 'DMS').replace(/[^a-zA-Z0-9]/g, '_');
+  return `Surat_${cleanNo}_${name}.pdf`;
+};
+
+const handleDownloadPdf = async () => {
+  isDownloadingPdf.value = true;
+  noticeMessage.value = '';
+  const filename = getFilename();
+  const id = props.serviceId || activeLetter.value?.id;
+  const ticket = props.ticketNumber || activeLetter.value?.ticket_number;
+
+  try {
+    if (id) {
+      await adminService.downloadServicePdf(id, filename);
+    } else if (ticket) {
+      await publicService.downloadPublicPdf(ticket, filename);
+    } else {
+      window.print();
+    }
+    noticeMessage.value = `Berkas PDF "${filename}" berhasil diunduh.`;
+    setTimeout(() => (noticeMessage.value = ''), 4000);
+  } catch (err) {
+    console.error('Gagal unduh PDF API, fallback ke print peramban.', err);
+    window.print();
+  } finally {
+    isDownloadingPdf.value = false;
+  }
+};
+
+const handleSendPdfToWhatsApp = async () => {
+  isSendingWhatsapp.value = true;
+  noticeMessage.value = '';
+  const filename = getFilename();
+  const id = props.serviceId || activeLetter.value?.id;
+  const ticket = props.ticketNumber || activeLetter.value?.ticket_number;
+
+  let downloadedBlob = null;
+  try {
+    if (id) {
+      downloadedBlob = await adminService.downloadServicePdf(id, filename);
+    } else if (ticket) {
+      downloadedBlob = await publicService.downloadPublicPdf(ticket, filename);
+    }
+  } catch (err) {
+    console.warn('Gagal unduh blob PDF.', err);
+  }
+
+  // Jika peramban mendukung Web Share API dengan berkas dokumen (contoh: di ponsel/tablet)
+  if (downloadedBlob && navigator.canShare) {
+    try {
+      const file = new File([downloadedBlob], filename, { type: 'application/pdf' });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: `Surat Resmi Desa - ${filename}`,
+          text: `Berikut kami lampirkan berkas dokumen surat resmi Anda dari Pemerintah Desa Mandiri Sejahtera.`,
+        });
+        isSendingWhatsapp.value = false;
+        return;
+      }
+    } catch (shareErr) {
+      console.log('Share API dibatalkan/tidak didukung, melanjutkan ke obrolan WhatsApp Web.');
+    }
+  }
+
+  // Buka tautan obrolan WhatsApp pemohon (yang menyertakan tautan unduh PDF resmi)
+  if (effectiveWhatsappUrl.value) {
+    window.open(effectiveWhatsappUrl.value, '_blank');
+  }
+
+  noticeMessage.value = `Berkas PDF "${filename}" telah otomatis terunduh ke komputer Anda. Silakan lampirkan (drag-and-drop / klik ikon lampiran) berkas PDF tersebut ke ruang obrolan WhatsApp pemohon yang baru saja terbuka.`;
+  setTimeout(() => (noticeMessage.value = ''), 12000);
+
+  isSendingWhatsapp.value = false;
+};
 
 const handlePrint = () => {
   window.print();

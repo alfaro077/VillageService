@@ -126,5 +126,25 @@ export const publicService = {
     const response = await api.get(`/public/track/${encodeURIComponent(clean)}/letter`);
     return response.data.data;
   },
+
+  /**
+   * Unduh file PDF dokumen resmi digital langsung dari server via nomor tiket.
+   */
+  async downloadPublicPdf(ticketNumber, filename = 'surat_resmi.pdf') {
+    const clean = ticketNumber.trim().toUpperCase();
+    const response = await api.get(`/public/track/${encodeURIComponent(clean)}/pdf`, {
+      responseType: 'blob',
+    });
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+    return blob;
+  },
 };
 

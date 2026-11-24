@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\ServiceRequest;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\PDF as DomPdfInstance;
 use Carbon\Carbon;
 
 class OfficialLetterService
@@ -69,6 +71,7 @@ class OfficialLetterService
         $phone = $this->formatWhatsAppPhone($serviceRequest->phone_number);
 
         $trackingUrl = url("/lacak?ticket={$ticket}");
+        $pdfUrl = url("/api/v1/public/track/{$ticket}/pdf");
 
         $message = "Yth. Bapak/Ibu *{$fullName}*,\n\n"
             ."Pemberitahuan dari *Pemerintah Desa Mandiri Sejahtera*:\n"
@@ -76,9 +79,11 @@ class OfficialLetterService
             ."*Rincian Surat:*\n"
             ."• Jenis Surat: {$serviceName}\n"
             ."• Nomor Surat Resmi: {$letterNumber}\n\n"
-            ."Surat digital Anda telah terbit dan dapat langsung diunduh/dicetak melalui tautan resmi:\n"
+            ."📄 *Unduh Berkas Surat Resmi (Format PDF):*\n"
+            ."{$pdfUrl}\n\n"
+            ."Portal Lacak & Status Layanan:\n"
             ."{$trackingUrl}\n\n"
-            ."Atau Anda dapat mengambil fisik surat bertanda tangan dan berstempel basah di Kantor Balai Desa Mandiri Sejahtera pada jam kerja (Senin - Jumat, 08.00 - 15.30 WIB).\n\n"
+            ."Atau Anda dapat mengambil fisik surat bertanda tangan di Kantor Balai Desa Mandiri Sejahtera pada jam kerja (Senin - Jumat, 08.00 - 15.30 WIB).\n\n"
             .'_Pesan otomatis resmi Sistem Pelayanan Online Desa Mandiri Sejahtera._';
 
         $encodedText = urlencode($message);
@@ -89,7 +94,20 @@ class OfficialLetterService
             'formatted_phone' => $phone,
             'message' => $message,
             'whatsapp_url' => $whatsappUrl,
+            'pdf_url' => $pdfUrl,
         ];
+    }
+
+    /**
+     * Hasilkan objek dokumen PDF resmi A4 siap unduh/stream.
+     */
+    public function generatePdf(ServiceRequest $serviceRequest): DomPdfInstance
+    {
+        $letter = $this->buildLetterDocument($serviceRequest);
+        $pdf = Pdf::loadView('pdf.official_letter', compact('letter'));
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf;
     }
 
     /**
@@ -140,6 +158,7 @@ class OfficialLetterService
             'isi_keterangan' => $contentParagraph,
             'tanggal_terbit' => $tanggalSurat,
             'qr_verification_url' => url("/lacak?ticket={$serviceRequest->ticket_number}"),
+            'pdf_download_url' => url("/api/v1/public/track/{$serviceRequest->ticket_number}/pdf"),
             'status' => $serviceRequest->status,
             'tte' => [
                 'is_digital' => true,
