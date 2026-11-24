@@ -95,7 +95,7 @@
           <h3 class="text-sm font-bold text-slate-900">5 Permohonan Surat Terbaru</h3>
           <p class="text-xs text-slate-400 mt-0.5">Daftar permohonan yang baru saja dikirim oleh warga desa.</p>
         </div>
-        <RouterLink to="/admin/layanan" class="text-xs font-bold text-emerald-700 hover:text-emerald-800">
+        <RouterLink to="/admin/layanan" class="text-xs font-bold text-blue-600 hover:text-blue-700">
           Lihat Semua Permohonan →
         </RouterLink>
       </div>

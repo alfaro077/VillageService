@@ -18,7 +18,7 @@
       <!-- Success Modal Tiket -->
       <div v-if="submittedTicket" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
         <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-slate-100 text-center animate-in fade-in zoom-in duration-200">
-          <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
             </svg>
@@ -36,7 +36,7 @@
             </div>
             <button
               @click="copyTicket"
-              class="px-3.5 py-2 text-xs font-bold rounded-xl bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition-colors shadow-xs"
+              class="px-3.5 py-2 text-xs font-bold rounded-xl bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition-colors shadow-xs cursor-pointer"
             >
               {{ copied ? 'Tersalin ✓' : 'Salin Tiket' }}
             </button>
@@ -45,13 +45,13 @@
           <div class="flex items-center gap-3">
             <RouterLink
               :to="{ path: '/lacak', query: { ticket: submittedTicket } }"
-              class="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors shadow-xs"
+              class="flex-1 py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shadow-xs"
             >
               Lacak Status Sekarang
             </RouterLink>
             <button
               @click="resetForm"
-              class="py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors"
+              class="py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
             >
               Buat Pengajuan Baru
             </button>
@@ -71,7 +71,7 @@
             v-else
             v-model="form.service_type_id"
             required
-            class="w-full text-sm bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+            class="w-full text-sm bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
           >
             <option value="" disabled>-- Pilih jenis surat yang dibutuhkan --</option>
             <option v-for="type in serviceTypes" :key="type.id" :value="type.id">
@@ -92,7 +92,7 @@
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
               2. Data Identitas Pemohon (Otomatis Terenkripsi) <span class="text-rose-500">*</span>
             </label>
-            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+            <span class="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
               🔒 In-Transit AES-256
             </span>
           </div>
@@ -107,7 +107,7 @@
                 required
                 pattern="[0-9]{16}"
                 placeholder="16 digit angka NIK"
-                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all font-mono"
+                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all font-mono"
               />
               <span class="text-[10px] text-slate-400 mt-1 block">Contoh: 3201123456789012</span>
             </div>
@@ -121,7 +121,7 @@
                 required
                 pattern="[0-9]{16}"
                 placeholder="16 digit nomor KK"
-                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all font-mono"
+                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all font-mono"
               />
             </div>
 
@@ -132,7 +132,7 @@
                 type="text"
                 required
                 placeholder="Nama lengkap pemohon"
-                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
               />
             </div>
 
@@ -143,7 +143,7 @@
                 type="tel"
                 required
                 placeholder="081234567890"
-                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
               />
             </div>
 
@@ -154,7 +154,7 @@
                 rows="2"
                 required
                 placeholder="Dusun / RT / RW / No. Rumah"
-                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
               ></textarea>
             </div>
 
@@ -165,7 +165,7 @@
                 rows="2"
                 required
                 placeholder="Jelaskan untuk keperluan apa surat ini digunakan (misal: syarat pendaftaran beasiswa, administrasi bank, dll.)"
-                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
               ></textarea>
             </div>
           </div>
@@ -180,29 +180,29 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <!-- Upload KTP -->
-            <div class="border-2 border-dashed border-slate-200 hover:border-emerald-400 rounded-2xl p-4 text-center transition-colors bg-slate-50/50">
+            <div class="border-2 border-dashed border-slate-200 hover:border-blue-500 rounded-2xl p-4 text-center transition-colors bg-slate-50/50">
               <span class="text-xs font-bold text-slate-800 block mb-1">Foto / Scan KTP Asli *</span>
               <input
                 type="file"
                 accept="image/jpeg,image/png,application/pdf"
                 @change="handleKtpChange"
                 required
-                class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer"
+                class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
               />
-              <p v-if="ktpFile" class="text-[11px] text-emerald-600 font-semibold mt-2">✓ Terpilih: {{ ktpFile.name }}</p>
+              <p v-if="ktpFile" class="text-[11px] text-blue-600 font-semibold mt-2">✓ Terpilih: {{ ktpFile.name }}</p>
             </div>
 
             <!-- Upload KK -->
-            <div class="border-2 border-dashed border-slate-200 hover:border-emerald-400 rounded-2xl p-4 text-center transition-colors bg-slate-50/50">
+            <div class="border-2 border-dashed border-slate-200 hover:border-blue-500 rounded-2xl p-4 text-center transition-colors bg-slate-50/50">
               <span class="text-xs font-bold text-slate-800 block mb-1">Foto / Scan Kartu Keluarga *</span>
               <input
                 type="file"
                 accept="image/jpeg,image/png,application/pdf"
                 @change="handleKkChange"
                 required
-                class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer"
+                class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
               />
-              <p v-if="kkFile" class="text-[11px] text-emerald-600 font-semibold mt-2">✓ Terpilih: {{ kkFile.name }}</p>
+              <p v-if="kkFile" class="text-[11px] text-blue-600 font-semibold mt-2">✓ Terpilih: {{ kkFile.name }}</p>
             </div>
           </div>
         </div>
@@ -220,7 +220,7 @@
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="px-8 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-md shadow-emerald-600/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            class="px-8 py-3.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white text-xs font-bold transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 cursor-pointer"
           >
             <svg v-if="isSubmitting" class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

@@ -77,7 +77,7 @@
               type="button"
               @click="setAccount('superadmin@desa.id', 'SuperAdmin123!')"
               class="p-2.5 rounded-xl border text-left transition-all cursor-pointer"
-              :class="email === 'superadmin@desa.id' ? 'border-indigo-500 bg-indigo-50/50 text-indigo-900 ring-1 ring-indigo-500' : 'border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700'"
+              :class="email === 'superadmin@desa.id' ? 'border-blue-600 bg-blue-50/50 text-blue-900 ring-1 ring-blue-600' : 'border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700'"
             >
               <div class="flex items-center gap-1 font-bold text-xs mb-0.5">
                 <span>👑 Superadmin</span>

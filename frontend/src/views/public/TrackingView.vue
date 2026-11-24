@@ -18,13 +18,13 @@
               type="text"
               required
               placeholder="Contoh: SRV-202611-ABC123 atau ADU-202611-XYZ789"
-              class="w-full text-base font-mono uppercase bg-slate-50 border border-slate-300 rounded-2xl px-5 py-3.5 text-slate-900 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+              class="w-full text-base font-mono uppercase bg-slate-50 border border-slate-300 rounded-2xl px-5 py-3.5 text-slate-900 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
             />
           </div>
           <button
             type="submit"
             :disabled="isLoading"
-            class="w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-2xl transition-all shadow-md shadow-emerald-600/20 shrink-0 disabled:opacity-50"
+            class="w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-2xl transition-all shadow-md shadow-blue-600/20 shrink-0 disabled:opacity-50 cursor-pointer"
           >
             {{ isLoading ? 'Mencari...' : 'Periksa Status' }}
           </button>
@@ -75,12 +75,12 @@
         </div>
 
         <!-- Privacy Shield Notice -->
-        <div class="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-100 text-emerald-900 text-xs flex items-center gap-3">
-          <div class="p-1.5 bg-emerald-100 text-emerald-700 rounded-lg shrink-0">
+        <div class="p-4 bg-blue-50/70 rounded-2xl border border-blue-200 text-slate-900 text-xs flex items-center gap-3">
+          <div class="p-2 bg-blue-600 text-white rounded-xl shrink-0 shadow-xs">
             🔒
           </div>
-          <p>
-            <strong>Privasi Terlindungi:</strong> Informasi identitas warga (NIK, Nama, dan Alamat) sengaja tidak ditampilkan pada portal lacak publik ini untuk mencegah kebocoran data pribadi Anda kepada pihak lain.
+          <p class="text-slate-600 leading-relaxed">
+            <strong class="text-slate-900">Privasi Terlindungi:</strong> Informasi identitas warga (NIK, Nama, dan Alamat) sengaja tidak ditampilkan pada portal lacak publik ini untuk mencegah kebocoran data pribadi Anda kepada pihak lain.
           </p>
         </div>
       </div>
@@ -114,7 +114,7 @@ const formatDate = (isoStr) => {
 
 const notesCardClass = computed(() => {
   if (result.value?.status === 'selesai') {
-    return 'bg-emerald-50 border-emerald-200 text-emerald-900';
+    return 'bg-blue-50 border-blue-200 text-blue-950';
   }
   if (result.value?.status === 'ditolak') {
     return 'bg-rose-50 border-rose-200 text-rose-900';

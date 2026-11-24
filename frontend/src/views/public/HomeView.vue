@@ -1,20 +1,20 @@
 <template>
   <div>
     <!-- Hero Section Bersih, Modern, Terpercaya -->
-    <section class="relative bg-gradient-to-b from-emerald-50/50 via-white to-white py-16 sm:py-24 border-b border-slate-100">
+    <section class="relative bg-gradient-to-b from-blue-50/40 via-white to-white py-16 sm:py-24 border-b border-slate-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-100/80 text-emerald-800 mb-6">
-            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200/80 mb-6 shadow-2xs">
+            <span class="w-2 h-2 rounded-full bg-blue-600"></span>
             Layanan Administrasi Mandiri 100% Digital & Terenkripsi
           </div>
 
           <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight sm:leading-tight">
-            Urus Dokumen & Surat Desa dari Rumah, <span class="text-emerald-600">Lebih Cepat & Aman</span>
+            Urus Dokumen & Surat Desa dari Rumah, <span class="text-blue-600">Lebih Cepat & Aman</span>
           </h1>
 
           <p class="mt-5 text-base sm:text-lg text-slate-600 leading-relaxed">
-            Portal resmi pelayanan kependudukan Desa Mandiri Sejahtera. Ajukan surat permohonan, sampaikan aspirasi/pengaduan, dan pantau status pemrosesan secara *real-time* tanpa antre.
+            Portal resmi pelayanan kependudukan Desa Mandiri Sejahtera. Ajukan surat permohonan, sampaikan aspirasi/pengaduan, dan pantau status pemrosesan secara <em>real-time</em> tanpa antre.
           </p>
 
           <!-- Input Cepat Lacak Tiket -->
@@ -33,7 +33,7 @@
             />
             <button
               @click="handleQuickTrack"
-              class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-colors shrink-0 shadow-xs"
+              class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-colors shrink-0 shadow-xs cursor-pointer"
             >
               Lacak Status
             </button>
@@ -43,7 +43,7 @@
           <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
             <RouterLink
               to="/layanan"
-              class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition-all shadow-sm"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 hover:bg-blue-600 text-white text-sm font-semibold transition-all shadow-sm"
             >
               <span>Ajukan Permohonan Surat</span>
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -53,7 +53,7 @@
 
             <RouterLink
               to="/pengaduan"
-              class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-sm font-semibold transition-all"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 hover:border-slate-400 text-sm font-semibold transition-all"
             >
               <span>Pengaduan & Aspirasi Warga</span>
             </RouterLink>
@@ -66,7 +66,7 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-10">
       <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md shadow-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center shrink-0">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
@@ -78,15 +78,15 @@
         </div>
         <div class="flex items-center gap-6 text-xs text-slate-600 font-semibold shrink-0">
           <span class="flex items-center gap-1.5">
-            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             Enkripsi In-Transit
           </span>
           <span class="flex items-center gap-1.5">
-            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             Enkripsi At-Rest (Database)
           </span>
           <span class="flex items-center gap-1.5">
-            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
             No PII Leaks saat Lacak
           </span>
         </div>
@@ -97,13 +97,13 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Pelayanan Mandiri</span>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Pelayanan Mandiri</span>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Layanan Administrasi Surat Kependudukan</h2>
           <p class="text-sm text-slate-500 mt-2">Pilih jenis surat yang Anda butuhkan dan isi formulir dalam hitungan menit.</p>
         </div>
         <RouterLink
           to="/layanan"
-          class="mt-4 md:mt-0 text-sm font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1"
+          class="mt-4 md:mt-0 text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
         >
           Lihat Semua Formulir
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -120,13 +120,13 @@
         <div
           v-for="service in serviceTypes"
           :key="service.id"
-          class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-50 transition-all flex flex-col justify-between group"
+          class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/5 transition-all flex flex-col justify-between group"
         >
           <div>
-            <div class="w-10 h-10 rounded-xl bg-slate-50 text-slate-700 group-hover:bg-emerald-50 group-hover:text-emerald-700 flex items-center justify-center font-bold text-xs transition-colors border border-slate-100">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 group-hover:bg-slate-900 group-hover:text-white flex items-center justify-center font-bold text-xs transition-colors border border-slate-200">
               {{ service.code }}
             </div>
-            <h3 class="text-base font-bold text-slate-900 mt-4 group-hover:text-emerald-600 transition-colors">
+            <h3 class="text-base font-bold text-slate-900 mt-4 group-hover:text-blue-600 transition-colors">
               {{ service.name }}
             </h3>
             <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -139,7 +139,7 @@
                 <span
                   v-for="(doc, idx) in service.required_documents"
                   :key="idx"
-                  class="text-[11px] bg-slate-50 text-slate-600 px-2 py-0.5 rounded-md border border-slate-100 font-medium"
+                  class="text-[11px] bg-slate-50 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200 font-medium"
                 >
                   {{ typeof doc === 'object' ? doc.label : doc }}
                 </span>
@@ -150,7 +150,7 @@
           <div class="mt-6 pt-2">
             <RouterLink
               :to="{ path: '/layanan', query: { type: service.id } }"
-              class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-slate-800 bg-slate-50 hover:bg-emerald-600 hover:text-white transition-all border border-slate-200 hover:border-emerald-600"
+              class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-slate-800 bg-slate-50 hover:bg-slate-900 hover:text-white transition-all border border-slate-200 hover:border-slate-900"
             >
               Ajukan Surat Ini
               <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -166,7 +166,7 @@
     <section class="bg-slate-50/70 border-y border-slate-100 py-16 sm:py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto mb-12">
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Mudah & Transparan</span>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Mudah & Transparan</span>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Cara Mengajukan Surat Online</h2>
         </div>
 
@@ -200,9 +200,9 @@
 
     <!-- Pengaduan & Aspirasi Call to Action -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-      <div class="rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 text-white p-8 sm:p-12 shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
+      <div class="rounded-3xl bg-slate-900 text-white p-8 sm:p-12 shadow-xl border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-8">
         <div class="max-w-xl">
-          <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Aspirasi & Keluhan</span>
+          <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">Aspirasi & Keluhan</span>
           <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">Ada Kendala Fasilitas atau Layanan Desa?</h2>
           <p class="text-sm text-slate-300 mt-3 leading-relaxed">
             Laporkan kerusakan jalan, fasilitas umum, kendala bansos, atau sampaikan saran membangun demi kemajuan desa kita bersama. Laporan Anda ditindaklanjuti secara profesional.
@@ -210,7 +210,7 @@
         </div>
         <RouterLink
           to="/pengaduan"
-          class="shrink-0 px-8 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-sm font-bold rounded-xl transition-colors shadow-lg shadow-emerald-500/20"
+          class="shrink-0 px-8 py-3.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-xl transition-colors shadow-lg shadow-blue-600/30"
         >
           Kirim Pengaduan Sekarang
         </RouterLink>

@@ -67,7 +67,7 @@
           <select
             v-model="form.category"
             required
-            class="w-full text-sm bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:ring-2 focus:ring-blue-500 transition-all"
+            class="w-full text-sm bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
           >
             <option value="Infrastruktur & Jalan">Infrastruktur & Jalan Rusak</option>
             <option value="Fasilitas Umum & Kebersihan">Fasilitas Umum & Kebersihan</option>
@@ -87,7 +87,7 @@
             type="text"
             required
             placeholder="Contoh: Penerangan Jalan Mati di RT 04 Dusun 2"
-            class="w-full text-sm border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:ring-2 focus:ring-blue-500 transition-all"
+            class="w-full text-sm border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
           />
         </div>
 
@@ -100,7 +100,7 @@
             rows="4"
             required
             placeholder="Jelaskan secara jelas kronologi, dampak, dan apa yang diharapkan..."
-            class="w-full text-sm border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:ring-2 focus:ring-blue-500 transition-all"
+            class="w-full text-sm border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
           ></textarea>
         </div>
 
@@ -112,7 +112,7 @@
             v-model="form.location"
             type="text"
             placeholder="Contoh: Depan Balai Pertemuan RW 03"
-            class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:ring-2 focus:ring-blue-500 transition-all"
+            class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
           />
         </div>
 
@@ -130,7 +130,7 @@
                 type="text"
                 required
                 placeholder="Nama Anda atau Anonim"
-                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800"
+                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
               />
             </div>
 
@@ -140,7 +140,7 @@
                 v-model="form.reporter_phone"
                 type="tel"
                 placeholder="Untuk konfirmasi tindak lanjut"
-                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800"
+                class="w-full text-sm border border-slate-300 rounded-xl px-4 py-2.5 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
               />
             </div>
           </div>
@@ -172,7 +172,7 @@
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="px-8 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-md disabled:opacity-50 flex items-center gap-2"
+            class="px-8 py-3.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white text-xs font-bold transition-all shadow-md disabled:opacity-50 flex items-center gap-2 cursor-pointer"
           >
             <span>{{ isSubmitting ? 'Mengenkripsi & Mengirim...' : 'Kirim Pengaduan' }}</span>
           </button>

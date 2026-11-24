@@ -6,7 +6,7 @@
       <div class="h-20 px-6 border-b border-slate-100 flex items-center gap-3">
         <div
           class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-xs"
-          :class="isSuperAdmin ? 'bg-indigo-600' : 'bg-slate-900'"
+          :class="isSuperAdmin ? 'bg-blue-600' : 'bg-slate-900'"
         >
           {{ isSuperAdmin ? 'SUP' : 'ADM' }}
         </div>
@@ -60,15 +60,15 @@
         <!-- Menu Khusus Superadmin -->
         <template v-if="isSuperAdmin">
           <div class="pt-5 mt-5 border-t border-slate-100">
-            <div class="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-indigo-500 flex items-center justify-between">
+            <div class="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-blue-600 flex items-center justify-between">
               <span>Superadmin Kontrol</span>
-              <span class="px-1.5 py-0.5 rounded text-[9px] bg-indigo-50 text-indigo-600 border border-indigo-100">Root</span>
+              <span class="px-1.5 py-0.5 rounded text-[9px] bg-blue-50 text-blue-700 border border-blue-100">Root</span>
             </div>
 
             <RouterLink
               to="/admin/master-layanan"
               class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-              :class="$route.name === 'superadmin-services' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'"
+              :class="$route.name === 'superadmin-services' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -79,7 +79,7 @@
             <RouterLink
               to="/admin/log-aktivitas"
               class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-              :class="$route.name === 'superadmin-logs' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'"
+              :class="$route.name === 'superadmin-logs' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -90,7 +90,7 @@
             <RouterLink
               to="/admin/kelola-petugas"
               class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-              :class="$route.name === 'superadmin-users' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'"
+              :class="$route.name === 'superadmin-users' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -122,7 +122,7 @@
               <p class="text-xs font-bold text-slate-900 truncate">{{ adminUser?.name || 'Administrator' }}</p>
               <span
                 v-if="isSuperAdmin"
-                class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-indigo-100 text-indigo-700 uppercase"
+                class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-blue-100 text-blue-700 uppercase"
               >
                 Super
               </span>
@@ -158,16 +158,16 @@
         <div class="flex items-center gap-3">
           <span
             v-if="isSuperAdmin"
-            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200"
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200"
           >
-            <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+            <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
             👑 Superadmin (Root)
           </span>
           <span
             v-else
-            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-800 border border-slate-300"
           >
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="w-2 h-2 rounded-full bg-slate-700"></span>
             🛡️ Sesi Petugas Terverifikasi
           </span>
         </div>
